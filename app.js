@@ -2,4 +2,20 @@ const express = require("express");
 
 const app = express();
 
+app.all("*", (req, res) => {
+  res.status(404).send({ msg: "Route not found" });
+});
+
+app.use((err, req, res, next) => {
+  if (["22P02", "23502"].includes(err.code)) {
+    res.status(400).send({ msg: "Bad Request" });
+  } else next(err);
+});
+
+app.use((err, req, res, next) => {
+  if (err.status) {
+    res.status(err.status).send({ msg: err.msg });
+  }
+});
+
 module.exports = app();
