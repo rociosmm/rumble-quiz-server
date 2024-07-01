@@ -1,6 +1,8 @@
 const express = require("express");
-
+const { apiRouter } = require("routes/index");
 const app = express();
+
+app.use("/api", apiRouter);
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
@@ -18,4 +20,4 @@ app.use((err, req, res, next) => {
   }
 });
 
-module.exports = app();
+module.exports = app;
