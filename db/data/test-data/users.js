@@ -6,7 +6,7 @@ module.exports = [
     password: "123abc",
     avatar_id: 1,
     isChild: false,
-    color_theme_id: 1,
+    colour_theme_id: 1,
     online: false,
   },
   {
@@ -16,7 +16,7 @@ module.exports = [
     password: "123abc",
     avatar_id: 2,
     isChild: false,
-    color_theme_id: 1,
+    colour_theme_id: 1,
     online: false,
   },
   {
