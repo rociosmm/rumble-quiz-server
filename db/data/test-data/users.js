@@ -8,7 +8,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/1-image.jpg",
   },
   {
     id: 2,
@@ -19,7 +18,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/2-image.jpg",
   },
   {
     id: 3,
@@ -30,7 +28,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/3-image.jpg",
   },
   {
     id: 4,
@@ -41,7 +38,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/4-image.jpg",
   },
   {
     id: 5,
@@ -52,7 +48,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/5-image.jpg",
   },
   {
     id: 6,
@@ -63,7 +58,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/6-image.jpg",
   },
   {
     id: 7,
@@ -74,7 +68,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/7-image.jpg",
   },
   {
     id: 8,
@@ -85,7 +78,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/8-image.jpg",
   },
   {
     id: 9,
@@ -96,7 +88,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/9-image.jpg",
   },
   {
     id: 10,
@@ -107,7 +98,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/10-image.jpg",
   },
   {
     id: 11,
@@ -118,7 +108,6 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/11-image.jpg",
   },
   {
     id: 12,
@@ -129,6 +118,5 @@ module.exports = [
     isChild: false,
     color_theme_id: 1,
     online: false,
-    avatar_url: "https://reqres.in/img/faces/12-image.jpg",
   },
 ];
