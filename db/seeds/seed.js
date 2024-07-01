@@ -1,6 +1,15 @@
 const db = require("../connection");
+const format = require("pg-format");
 
-function seed() {
+function seed({
+  avatars,
+  colourThemes,
+  users,
+  sounds,
+  friendship,
+  notifications,
+  logs,
+}) {
   return db
     .query(`DROP TABLE IF EXISTS sounds;`)
     .then(() => {
@@ -56,7 +65,7 @@ function seed() {
       return db.query(`
             CREATE TABLE sounds (
             sound_id SERIAL PRIMARY KEY,
-            sound_url VARCHAR(50) NOT NULL,
+            sound_url VARCHAR(100) NOT NULL,
             category VARCHAR(20) NOT NULL
             )
             `);
@@ -92,6 +101,93 @@ function seed() {
             topic_name VARCHAR(50)
             )
             `);
+    })
+    .then(() => {
+      const insertAvatarsQueryStr = format(
+        "INSERT INTO avatars (avatar_url) VALUES %L",
+        avatars.map(({ avatar_url }) => [avatar_url])
+      );
+
+      const avatarPromise = db.query(insertAvatarsQueryStr);
+
+      const insertColourThemesQueryStr = format(
+        "INSERT INTO colour_themes (colour_theme_name) VALUES %L",
+        colourThemes.map(({ theme_name }) => [theme_name])
+      );
+
+      const colourThemesPromise = db.query(insertColourThemesQueryStr);
+
+      return Promise.all([avatarPromise, colourThemesPromise]);
+    })
+    .then(() => {
+      const usersQueryStr = format(
+        `INSERT INTO users (username, email, password, avatar_id, is_child, colour_theme_id, online) VALUES %L`,
+        users.map(
+          ({
+            username,
+            email,
+            password,
+            avatar_id,
+            isChild,
+            color_theme_id,
+            online,
+          }) => [
+            username,
+            email,
+            password,
+            avatar_id,
+            isChild,
+            color_theme_id,
+            online,
+          ]
+        )
+      );
+
+      return db.query(usersQueryStr);
+    })
+    .then(() => {
+      const soundsQueryStr = format(
+        `INSERT INTO sounds (sound_url, category) VALUES %L`,
+        sounds.map(({ sound_url, category }) => [sound_url, category])
+      );
+      return db.query(soundsQueryStr);
+    })
+    .then(() => {
+      const friendshipQueryStr = format(
+        `INSERT INTO friendship (user1_id, user2_id) VALUES %L`,
+        friendship.map(({ user1_id, user2_id }) => [user1_id, user2_id])
+      );
+
+      return db.query(friendshipQueryStr);
+    })
+    .then(() => {
+      const notificationQueryStr = format(
+        `INSERT INTO notifications (notification_text, seen, user_id, sender_id) VALUES %L`,
+        notifications.map(({ notification_text, seen, user_id, sender_id }) => [
+          notification_text,
+          seen,
+          user_id,
+          sender_id,
+        ])
+      );
+
+      return db.query(notificationQueryStr);
+    })
+    .then(() => {
+      const logQuerystr = format(
+        `INSERT INTO logs (game_id, player_id, won_game, points_gained, topic_name) VALUES %L`,
+        logs.map(
+          ({ game_id, player_id, won_game, points_gained, topic_name }) => [
+            game_id,
+            player_id,
+            won_game,
+            points_gained,
+            topic_name,
+          ]
+        )
+      );
+
+      return db.query(logQuerystr);
     });
 }
 module.exports = seed;
