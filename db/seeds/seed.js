@@ -1,5 +1,6 @@
 const db = require("../connection");
 const format = require("pg-format");
+const bcrypt = require("bcrypt");
 
 function seed({
   avatars,
@@ -53,7 +54,7 @@ function seed({
             user_id SERIAL PRIMARY KEY,
             username VARCHAR (20) NOT NULL,
             email VARCHAR(50) NOT NULL,
-            password VARCHAR(50),
+            password VARCHAR(60),
             avatar_id INT REFERENCES avatars(avatar_id),
             is_child BOOLEAN,
             colour_theme_id INT REFERENCES colour_themes(colour_theme_id),
@@ -119,27 +120,33 @@ function seed({
 
       return Promise.all([avatarPromise, colourThemesPromise]);
     })
+
     .then(() => {
+      return Promise.all(
+        users.map(({ password }) => {
+          return bcrypt.hash(password, 10);
+        })
+      );
+    })
+    .then((passwords) => {
+      
       const usersQueryStr = format(
         `INSERT INTO users (username, email, password, avatar_id, is_child, colour_theme_id, online) VALUES %L`,
         users.map(
-          ({
-            username,
-            email,
-            password,
-            avatar_id,
-            isChild,
-            color_theme_id,
-            online,
-          }) => [
-            username,
-            email,
-            password,
-            avatar_id,
-            isChild,
-            color_theme_id,
-            online,
-          ]
+          (
+            { username, email, avatar_id, isChild, color_theme_id, online },
+            index
+          ) => {
+            return [
+              username,
+              email,
+              passwords[index],
+              avatar_id,
+              isChild,
+              color_theme_id,
+              online,
+            ];
+          }
         )
       );
 
