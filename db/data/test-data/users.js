@@ -6,7 +6,7 @@ module.exports = [
     avatar_id: 1,
     isChild: false,
     colour_theme_id: 1,
-    online: false,
+    online: true,
   },
   {
     username: "Janet",
