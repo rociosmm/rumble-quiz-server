@@ -129,12 +129,11 @@ function seed({
       );
     })
     .then((passwords) => {
-      
       const usersQueryStr = format(
         `INSERT INTO users (username, email, password, avatar_id, is_child, colour_theme_id, online) VALUES %L`,
         users.map(
           (
-            { username, email, avatar_id, isChild, color_theme_id, online },
+            { username, email, avatar_id, isChild, colour_theme_id, online },
             index
           ) => {
             return [
@@ -143,7 +142,7 @@ function seed({
               passwords[index],
               avatar_id,
               isChild,
-              color_theme_id,
+              colour_theme_id,
               online,
             ];
           }
