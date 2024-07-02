@@ -1,5 +1,17 @@
 const db = require("../db/connection");
 
+exports.fetchOnlineUsers = () => {
+
+  return db
+    .query(
+      `SELECT user_id, username, email, avatar_id, is_child, colour_theme_id, online FROM users
+    WHERE online = true;`
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
+
 exports.fetchUser = (username) => {
   return db
     .query(
