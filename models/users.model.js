@@ -1,7 +1,7 @@
 const db = require("../db/connection");
+const bcrypt = require("bcrypt");
 
 exports.fetchOnlineUsers = () => {
-
   return db
     .query(
       `SELECT user_id, username, email, avatar_id, is_child, colour_theme_id, online FROM users
@@ -23,6 +23,42 @@ exports.fetchUser = (username) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404, msg: "User Not Found" });
       }
+      return rows[0];
+    });
+};
+
+exports.createUser = (newUser) => {
+  const {
+    username,
+    email,
+    password,
+    avatar_id,
+    is_child,
+    colour_theme_id,
+    online,
+  } = newUser;
+
+  return bcrypt
+    .hash(password, 10)
+    .then((password) => {
+      return db.query(
+        `INSERT INTO users (username, email, password, avatar_id, is_child, colour_theme_id, online)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING *`,
+        [
+          username,
+          email,
+          password,
+          avatar_id,
+          is_child,
+          colour_theme_id,
+          online,
+        ]
+      );
+    })
+
+    .then(({ rows }) => {
+      
       return rows[0];
     });
 };
