@@ -1,5 +1,6 @@
 const db = require("../db/connection");
 const bcrypt = require("bcrypt");
+const { checkIfExists } = require("./users.utils");
 
 exports.fetchOnlineUsers = () => {
   return db
@@ -38,8 +39,14 @@ exports.createUser = (newUser) => {
     online,
   } = newUser;
 
-  return bcrypt
-    .hash(password, 10)
+  return checkIfExists("username", username)
+    .then(() => {
+      return checkIfExists("email", email);
+    })
+    .then(() => {
+      return bcrypt.hash(password, 10);
+    })
+
     .then((password) => {
       return db.query(
         `INSERT INTO users (username, email, password, avatar_id, is_child, colour_theme_id, online)
@@ -58,7 +65,6 @@ exports.createUser = (newUser) => {
     })
 
     .then(({ rows }) => {
-      
       return rows[0];
     });
 };
