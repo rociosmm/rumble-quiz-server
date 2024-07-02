@@ -116,4 +116,22 @@ describe("/api/users/", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
+  test("POST: 400 bad request when the fields have invalid values", () => {
+    const requestBody = {
+      username: "Jo",
+      email: "madeup@madeup.com",
+      password: "password123",
+      avatar_id: 999,
+      is_child: false,
+      colour_theme_id: 1,
+      online: 5,
+    };
+    return request(app)
+      .post("/api/users")
+      .send(requestBody)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
 });
