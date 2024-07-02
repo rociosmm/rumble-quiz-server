@@ -35,6 +35,7 @@ function seed({
       const avatarsTablePromise = db.query(`
         CREATE TABLE avatars(
         avatar_id SERIAL PRIMARY KEY,
+        avatar_name VARCHAR(50) NOT NULL,
         avatar_url VARCHAR(50) NOT NULL
         )
         `);
@@ -105,8 +106,8 @@ function seed({
     })
     .then(() => {
       const insertAvatarsQueryStr = format(
-        "INSERT INTO avatars (avatar_url) VALUES %L",
-        avatars.map(({ avatar_url }) => [avatar_url])
+        "INSERT INTO avatars (avatar_name, avatar_url) VALUES %L",
+        avatars.map(({ avatar_name, avatar_url }) => [avatar_name, avatar_url])
       );
 
       const avatarPromise = db.query(insertAvatarsQueryStr);
