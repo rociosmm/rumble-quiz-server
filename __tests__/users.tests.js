@@ -54,4 +54,84 @@ describe("/api/users/", () => {
         });
       });
   });
+  test("POST: 201 responds with a newly posted user", () => {
+    const requestBody = {
+      username: "Jo",
+      email: "madeup@madeup.com",
+      password: "password123",
+      avatar_id: 1,
+      is_child: false,
+      colour_theme_id: 1,
+      online: true,
+    };
+    return request(app)
+      .post("/api/users")
+      .send(requestBody)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.newUser).toMatchObject({
+          user_id: 13,
+          username: "Jo",
+          email: "madeup@madeup.com",
+          password: expect.any(String),
+          avatar_id: 1,
+          is_child: false,
+          colour_theme_id: 1,
+          online: true,
+        });
+      });
+  });
+  test("POST: 201 responds with an encrypted password on password property", () => {
+    const requestBody = {
+      username: "Jo",
+      email: "madeup@madeup.com",
+      password: "password123",
+      avatar_id: 1,
+      is_child: false,
+      colour_theme_id: 1,
+      online: true,
+    };
+    return request(app)
+      .post("/api/users")
+      .send(requestBody)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.newUser.password).not.toBe(requestBody.password);
+        expect(body.newUser.password).toHaveLength(60);
+      });
+  });
+  test("POST: 400 bad request when required fields are missing", () => {
+    const requestBody = {
+      password: "password123",
+      avatar_id: 1,
+      is_child: false,
+      colour_theme_id: 1,
+      online: true,
+    };
+    return request(app)
+      .post("/api/users")
+      .send(requestBody)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+  test("POST: 400 bad request when the fields have invalid values", () => {
+    const requestBody = {
+      username: "Jo",
+      email: "madeup@madeup.com",
+      password: "password123",
+      avatar_id: 999,
+      is_child: false,
+      colour_theme_id: 1,
+      online: 5,
+    };
+    return request(app)
+      .post("/api/users")
+      .send(requestBody)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
 });
