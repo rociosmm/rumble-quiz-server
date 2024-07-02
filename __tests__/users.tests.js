@@ -7,10 +7,10 @@ const testData = require("../db/data/test-data/index");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe("/api/users/:user_id", () => {
+describe("/api/users/:username", () => {
   test("GET: 200 responds with a single user", () => {
     return request(app)
-      .get("/api/users/1")
+      .get("/api/users/George")
       .expect(200)
       .then(({ body }) => {
         expect(body.user).toEqual({
