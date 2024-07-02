@@ -2,6 +2,7 @@ const {
   fetchUser,
   fetchOnlineUsers,
   createUser,
+  modifyUser,
 } = require("../models/users.model");
 
 exports.getOnlineUsers = (req, res, next) => {
@@ -31,4 +32,13 @@ exports.postNewUser = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.patchUser = (req, res, next) => {
+  const newFields = req.body;
+  const { username } = req.params;
+
+  modifyUser(newFields, username).then((modifiedUser) => {
+    res.status(200).send({ modifiedUser });
+  });
 };

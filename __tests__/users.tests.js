@@ -31,6 +31,28 @@ describe("/api/users/:username", () => {
         expect(body.msg).toBe("User Not Found");
       });
   });
+  test("PATCH: 200 responds with the modified user", () => {
+    const newUsername = {
+      username: "Janet2",
+      email: "newemail@email.com",
+    };
+
+    return request(app)
+      .patch("/api/users/Janet")
+      .expect(200)
+      .send(newUsername)
+      .then(({ body }) => {
+        expect(body.modifiedUser).toMatchObject({
+          user_id: expect.any(Number),
+          username: "Janet2",
+          email: "newemail@email.com",
+          avatar_id: expect.any(Number),
+          is_child: expect.any(Boolean),
+          colour_theme_id: expect.any(Number),
+          online: expect.any(Boolean),
+        });
+      });
+  });
 });
 
 describe("/api/users/", () => {

@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const format = require("pg-format");
 const bcrypt = require("bcrypt");
 
 exports.fetchOnlineUsers = () => {
@@ -58,7 +59,44 @@ exports.createUser = (newUser) => {
     })
 
     .then(({ rows }) => {
-      
+      return rows[0];
+    });
+};
+
+exports.modifyUser = (modifiedUser, username) => {
+  const properties = Object.keys(modifiedUser);
+
+  return db
+    .query(`SELECT user_id FROM users WHERE username = $1;`, [username])
+    .then(({ rows }) => {
+      user_id = rows[0].user_id;
+
+      return Promise.all([
+        properties.map((property) => {
+          const newValue = modifiedUser[property];
+
+          const queryStr = format(
+            `
+        UPDATE users
+        SET %I = $1
+        WHERE user_id = $2
+        RETURNING *;
+        `,
+            property
+          );
+
+          return db.query(queryStr, [newValue, user_id]);
+        }),
+      ]);
+    })
+    .then((promiseArr) => {
+      console.log(promiseArr[0]);
+      return db.query(
+        `SELECT user_id, username, email, avatar_id, is_child, colour_theme_id, online FROM users WHERE user_id = $1;`,
+        [user_id]
+      );
+    })
+    .then(({ rows }) => {
       return rows[0];
     });
 };
