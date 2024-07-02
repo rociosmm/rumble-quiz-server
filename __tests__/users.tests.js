@@ -7,7 +7,7 @@ const testData = require("../db/data/test-data/index");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe("/api/users/:username", () => {
+describe.only("/api/users/:username", () => {
   test("GET: 200 responds with a single user", () => {
     return request(app)
       .get("/api/users/George")
@@ -22,6 +22,13 @@ describe("/api/users/:username", () => {
           colour_theme_id: expect.any(Number),
           online: expect.any(Boolean),
         });
+      });
+  });
+  test("GET: 404 responds with a message User Not Found", () => {
+    return request(app)
+      .get("/api/users/123")
+      .expect(({ body }) => {
+        expect(body.msg).toBe("User Not Found");
       });
   });
 });

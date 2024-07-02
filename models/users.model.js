@@ -8,7 +8,9 @@ exports.fetchUser = (username) => {
       [username]
     )
     .then(({ rows }) => {
-      console.log("model");
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "User Not Found" });
+      }
       return rows[0];
     });
 };
