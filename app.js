@@ -1,11 +1,13 @@
 const express = require("express");
-const { apiRouter, usersRouter } = require("./routes/index.js");
+const { apiRouter, usersRouter, avatarsRouter } = require("./routes/index.js");
 const app = express();
 app.use(express.json());
 
 app.use("/api", apiRouter);
 
 app.use("/api/users", usersRouter);
+
+app.use("/api/avatars", avatarsRouter)
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
