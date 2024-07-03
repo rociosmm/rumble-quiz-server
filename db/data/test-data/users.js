@@ -90,15 +90,6 @@ module.exports = [
     online: false,
   },
   {
-    username: "George",
-    email: "george.edwards@reqres.in",
-    password: "123abc",
-    avatar_id: 1,
-    isChild: false,
-    colour_theme_id: 1,
-    online: false,
-  },
-  {
     username: "Rachel",
     email: "rachel.howell@reqres.in",
     password: "123abc",
