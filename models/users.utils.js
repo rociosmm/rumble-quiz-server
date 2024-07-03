@@ -11,7 +11,7 @@ exports.checkIfExists = (propertyName, value) => {
     if (rows.length > 0) {
       return Promise.reject({
         status: 400,
-        msg: `Bad Request: ${propertyName} is already taken`,
+        msg: `Bad Request: ${propertyName}`,
       });
     }
   });
