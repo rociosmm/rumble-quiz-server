@@ -3,6 +3,7 @@ const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
+
 beforeEach(() => {
   return seed(testData);
 });
@@ -118,7 +119,7 @@ describe("/api/users/", () => {
       .expect(201)
       .then(({ body }) => {
         expect(body.newUser).toMatchObject({
-          user_id: 13,
+          user_id: 12,
           username: "Jo",
           email: "madeup@madeup.com",
           password: expect.any(String),
@@ -184,7 +185,7 @@ describe("/api/users/", () => {
   });
   test("POST: 400 responds with Bad Request: [username/ email] is already taken", () => {
     const requestBody = {
-      username: "George",
+      username: "Janet",
       email: "madeup@madeup.com",
       password: "password123",
       avatar_id: 1,
