@@ -1,6 +1,7 @@
 const db = require("../db/connection");
 const format = require("pg-format");
 const bcrypt = require("bcrypt");
+const { checkIfExists } = require("./users.utils");
 
 exports.fetchOnlineUsers = () => {
   return db
@@ -39,8 +40,14 @@ exports.createUser = (newUser) => {
     online,
   } = newUser;
 
-  return bcrypt
-    .hash(password, 10)
+  return checkIfExists("username", username)
+    .then(() => {
+      return checkIfExists("email", email);
+    })
+    .then(() => {
+      return bcrypt.hash(password, 10);
+    })
+
     .then((password) => {
       return db.query(
         `INSERT INTO users (username, email, password, avatar_id, is_child, colour_theme_id, online)
@@ -91,14 +98,12 @@ exports.modifyUser = (modifiedUser, username) => {
       return db.query(queryStr, [ user_id]);
     })
     .then(() => {
-      console.log(user_id);
       return db.query(
         `SELECT user_id, username, email, avatar_id, is_child, colour_theme_id, online FROM users WHERE user_id = $1;`,
         [user_id]
       );
     })
     .then(({ rows }) => {
-      console.log(rows);
       return rows[0];
     });
 };
