@@ -1,9 +1,11 @@
+const { friendship } = require("../db/data/test-data");
 const {
   fetchUser,
   fetchOnlineUsers,
   createUser,
   modifyUser,
   fetchFriends,
+  addFriendship,
 } = require("../models/users.model");
 const { checkIfExists } = require("../models/users.utils");
 
@@ -58,4 +60,13 @@ exports.getFriends = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.postFriendship = (req, res, next) => {
+  const { username } = req.params;
+  const { newFriend } = req.body;
+
+  addFriendship(username, newFriend).then((friendship) => {
+    res.status(200).send({ friendship });
+  });
 };

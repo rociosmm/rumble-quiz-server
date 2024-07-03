@@ -123,3 +123,19 @@ exports.fetchFriends = (username) => {
         });
     });
 };
+
+exports.addFriendship = (username, newFriend) => {
+  console.log(username, newFriend)
+  return db
+    .query(
+      `
+    INSERT INTO friendship (user1_username, user2_username)
+    VALUES ($1,$2)
+    RETURNING *
+    `,
+      [username, newFriend]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};

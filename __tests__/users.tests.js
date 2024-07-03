@@ -126,6 +126,22 @@ describe("/api/users/:username/friends", () => {
         expect(body.msg).toBe("User Not Found");
       });
   });
+  test("POST: 200 responds with new friendship", () => {
+    const newFriend = {
+      newFriend: "Janet",
+    };
+
+    return request(app)
+      .post("/api/users/Tobias/friends")
+      .send(newFriend)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.friendship).toEqual({
+          user1_username: "Tobias",
+          user2_username: "Janet",
+        });
+      });
+  });
 });
 
 describe("/api/users/", () => {
