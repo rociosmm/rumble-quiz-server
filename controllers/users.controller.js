@@ -38,7 +38,11 @@ exports.patchUser = (req, res, next) => {
   const newFields = req.body;
   const { username } = req.params;
 
-  modifyUser(newFields, username).then((modifiedUser) => {
-    res.status(200).send({ modifiedUser });
-  });
+  modifyUser(newFields, username)
+    .then((modifiedUser) => {
+      res.status(200).send({ modifiedUser });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };

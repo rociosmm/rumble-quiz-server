@@ -66,37 +66,39 @@ exports.createUser = (newUser) => {
 exports.modifyUser = (modifiedUser, username) => {
   const properties = Object.keys(modifiedUser);
 
+  if (properties.length === 0)
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+
   return db
     .query(`SELECT user_id FROM users WHERE username = $1;`, [username])
     .then(({ rows }) => {
+      if (rows.length === 0)
+        return Promise.reject({ status: 404, msg: "User Not Found" });
       user_id = rows[0].user_id;
 
-      return Promise.all([
-        properties.map((property) => {
-          const newValue = modifiedUser[property];
+      const setColumnStatemnts = properties.map((property) => {
+        const newValue = modifiedUser[property];
+        return `${property}='${newValue}'`;
+      });
 
-          const queryStr = format(
-            `
+
+      const queryStr = `
         UPDATE users
-        SET %I = $1
-        WHERE user_id = $2
-        RETURNING *;
-        `,
-            property
-          );
-
-          return db.query(queryStr, [newValue, user_id]);
-        }),
-      ]);
+        SET ${setColumnStatemnts.join(",")}
+        WHERE user_id = $1;
+        `;
+      console.log(queryStr)
+      return db.query(queryStr, [ user_id]);
     })
-    .then((promiseArr) => {
-      console.log(promiseArr[0]);
+    .then(() => {
+      console.log(user_id);
       return db.query(
         `SELECT user_id, username, email, avatar_id, is_child, colour_theme_id, online FROM users WHERE user_id = $1;`,
         [user_id]
       );
     })
     .then(({ rows }) => {
+      console.log(rows);
       return rows[0];
     });
 };

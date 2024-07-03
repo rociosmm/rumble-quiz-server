@@ -53,6 +53,31 @@ describe("/api/users/:username", () => {
         });
       });
   });
+  test("PATCH: 404 responds with Not Found", () => {
+    const newUsername = {
+      username: "Janet2",
+      email: "newemail@email.com",
+    };
+
+    return request(app)
+      .patch("/api/users/NotaUserName")
+      .expect(404)
+      .send(newUsername)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User Not Found");
+      });
+  });
+  test("PATCH: 400 responds with Bad Request when request is malformed", () => {
+    const badRequest = {};
+
+    return request(app)
+      .patch("/api/users/Janet")
+      .expect(400)
+      .send(badRequest)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
 });
 
 describe("/api/users/", () => {
