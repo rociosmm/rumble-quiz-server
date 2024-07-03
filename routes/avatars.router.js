@@ -1,7 +1,12 @@
-const { getAvatars } = require("../controllers/avatars.controller")
+const {
+  getAvatars,
+  getAvatarById,
+} = require("../controllers/avatars.controller");
 
-const avatarsRouter = require("express").Router()
+const avatarsRouter = require("express").Router();
 
-avatarsRouter.get("/", getAvatars)
+avatarsRouter.get("/", getAvatars);
 
-module.exports = avatarsRouter
+avatarsRouter.get("/:avatar_id", getAvatarById);
+
+module.exports = avatarsRouter;
