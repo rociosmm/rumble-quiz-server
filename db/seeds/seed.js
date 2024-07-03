@@ -96,7 +96,7 @@ function seed({
       return db.query(`
             CREATE TABLE logs(
             log_id SERIAL PRIMARY KEY,
-            game_id INT,
+            game_id VARCHAR,
             player_id INT REFERENCES users(user_id),
             won_game BOOLEAN,
             points_gained INT,
