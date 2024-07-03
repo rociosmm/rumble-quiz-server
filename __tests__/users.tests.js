@@ -142,6 +142,43 @@ describe("/api/users/:username/friends", () => {
         });
       });
   });
+  test("POST: 404 responds with User Not Found if username isn't found", () => {
+    const newFriend = {
+      newFriend: "Janet",
+    };
+
+    return request(app)
+      .post("/api/users/MrMan/friends")
+      .send(newFriend)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User Not Found");
+      });
+  });
+  test("POST: 404 responds with User Not Found if new friend username isn't found", () => {
+    const newFriend = {
+      newFriend: "MrMan",
+    };
+
+    return request(app)
+      .post("/api/users/Janet/friends")
+      .send(newFriend)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User Not Found");
+      });
+  });
+  test("POST: 400 responds with Bad Request if request is malformed", () => {
+    const newFriend = {};
+
+    return request(app)
+      .post("/api/users/Janet/friends")
+      .send(newFriend)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
 });
 
 describe("/api/users/", () => {
@@ -245,7 +282,7 @@ describe("/api/users/", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
-  test("POST: 400 responds with Bad Request: [username/ email] is already taken", () => {
+  test("POST: 400 responds with Bad Request: [username/ email]", () => {
     const requestBody = {
       username: "Janet",
       email: "madeup@madeup.com",
@@ -260,7 +297,7 @@ describe("/api/users/", () => {
       .send(requestBody)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad Request: username is already taken");
+        expect(body.msg).toBe("Bad Request: username");
       });
   });
 });

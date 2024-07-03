@@ -66,7 +66,11 @@ exports.postFriendship = (req, res, next) => {
   const { username } = req.params;
   const { newFriend } = req.body;
 
-  addFriendship(username, newFriend).then((friendship) => {
-    res.status(200).send({ friendship });
-  });
+  addFriendship(username, newFriend)
+    .then((friendship) => {
+      res.status(200).send({ friendship });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
