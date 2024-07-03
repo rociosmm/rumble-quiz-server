@@ -74,8 +74,8 @@ function seed({
     .then(() => {
       return db.query(`
         CREATE TABLE friendship (
-            user1_username VARCHAR(20) REFERENCES users(username),
-            user2_username VARCHAR(20) REFERENCES users(username)
+            user1_username VARCHAR(20) REFERENCES users(username) ON UPDATE CASCADE,
+            user2_username VARCHAR(20) REFERENCES users(username) ON UPDATE CASCADE
             );
             `);
     })
