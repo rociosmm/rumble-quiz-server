@@ -35,7 +35,7 @@ describe("/api/users/:username", () => {
   });
   test("PATCH: 200 responds with the modified user", () => {
     const newUsername = {
-      username: "Janet2",
+      username: "Janet52",
       email: "newemail@email.com",
     };
 
@@ -100,6 +100,20 @@ describe("/api/users/:username", () => {
       .send(badRequest)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad Request: Username/email exists in table");
+      });
+  });
+  test("GET: 200 should respond with all friends ", () => {
+    return request(app)
+      .get("/api/users/George/friends")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.friends).toHaveLength(3);
+        body.friends.forEach((friend) => {
+          expect(friend).toMatchObject({
+            user1_username: "George",
+            user2_username: expect.any(String),
+          });
+        });
       });
   });
 });

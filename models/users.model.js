@@ -105,3 +105,11 @@ exports.modifyUser = (modifiedUser, username) => {
       return rows[0];
     });
 };
+
+exports.fetchFriends = (username) => {
+  return db
+    .query(`SELECT * FROM friendship WHERE user1_username = $1`, [username])
+    .then(({ rows }) => {
+      return rows;
+    });
+};

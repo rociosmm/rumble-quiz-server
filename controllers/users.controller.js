@@ -3,6 +3,7 @@ const {
   fetchOnlineUsers,
   createUser,
   modifyUser,
+  fetchFriends,
 } = require("../models/users.model");
 
 exports.getOnlineUsers = (req, res, next) => {
@@ -45,4 +46,11 @@ exports.patchUser = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getFriends = (req, res, next) => {
+  const { username } = req.params;
+  fetchFriends(username).then((friends) => {
+    res.status(200).send({ friends });
+  });
 };
