@@ -73,10 +73,9 @@ function seed({
     })
     .then(() => {
       return db.query(`
-            CREATE TABLE friendship (
-            friendship_id SERIAL PRIMARY KEY,
-            user1_id INT REFERENCES users(user_id),
-            user2_id INT REFERENCES users(user_id)
+        CREATE TABLE friendship (
+            user1_username VARCHAR(20) REFERENCES users(username),
+            user2_username VARCHAR(20) REFERENCES users(username)
             );
             `);
     })
@@ -161,8 +160,11 @@ function seed({
     })
     .then(() => {
       const friendshipQueryStr = format(
-        `INSERT INTO friendship (user1_id, user2_id) VALUES %L;`,
-        friendship.map(({ user1_id, user2_id }) => [user1_id, user2_id])
+        `INSERT INTO friendship (user1_username, user2_username) VALUES %L`,
+        friendship.map(({ user1_username, user2_username }) => [
+          user1_username,
+          user2_username,
+        ])
       );
 
       return db.query(friendshipQueryStr);
