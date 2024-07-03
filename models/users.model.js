@@ -94,7 +94,6 @@ exports.modifyUser = (modifiedUser, username) => {
         SET ${setColumnStatemnts.join(",")}
         WHERE user_id = $1;
         `;
-      console.log(queryStr)
       return db.query(queryStr, [ user_id]);
     })
     .then(() => {

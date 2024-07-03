@@ -4,7 +4,7 @@ module.exports = [
     game_id: 1,
     player_id: 1,
     won_game: true,
-    topic_id: 1,
+    topic_name: 1,
     points: 100,
   },
   {
@@ -12,7 +12,7 @@ module.exports = [
     game_id: 1,
     player_id: 2,
     won_game: false,
-    topic_id: 1,
+    topic_name: 1,
     points: 40,
   },
   {
@@ -20,7 +20,7 @@ module.exports = [
     game_id: 1,
     player_id: 3,
     won_game: false,
-    topic_id: 1,
+    topic_name: 1,
     points: 70,
   },
   {
@@ -28,7 +28,7 @@ module.exports = [
     game_id: 2,
     player_id: 3,
     won_game: false,
-    topic_id: 1,
+    topic_name: 1,
     points: 70,
   },
   {
@@ -36,7 +36,7 @@ module.exports = [
     game_id: 2,
     player_id: 3,
     won_game: false,
-    topic_id: 1,
+    topic_name: 1,
     points: 70,
   },
   {
@@ -44,7 +44,7 @@ module.exports = [
     game_id: 2,
     player_id: 3,
     won_game: false,
-    topic_id: 1,
+    topic_name: 1,
     points: 70,
   },
 ];
