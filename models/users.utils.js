@@ -8,7 +8,7 @@ exports.checkIfExists = (propertyName, value) => {
     propertyName
   );
   return db.query(queryStr, [value]).then(({ rows }) => {
-    if (rows.length > 1) {
+    if (rows.length > 0) {
       return Promise.reject({
         status: 400,
         msg: `Bad Request: ${propertyName} is already taken`,
