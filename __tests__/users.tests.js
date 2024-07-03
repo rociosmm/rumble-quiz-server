@@ -103,6 +103,30 @@ describe("/api/users/:username", () => {
       });
   });
 });
+describe("/api/users/:username/friends", () => {
+  test("GET: 200 should respond with all friends ", () => {
+    return request(app)
+      .get("/api/users/George/friends")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.friends).toHaveLength(3);
+        body.friends.forEach((friend) => {
+          expect(friend).toMatchObject({
+            user1_username: "George",
+            user2_username: expect.any(String),
+          });
+        });
+      });
+  });
+  test("GET: 404 responds with User Not Found if username not found", () => {
+    return request(app)
+      .get("/api/users/madeupname/friends")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User Not Found");
+      });
+  });
+});
 
 describe("/api/users/", () => {
   test("GET: 200 responds with all online users", () => {

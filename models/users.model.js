@@ -87,13 +87,17 @@ exports.modifyUser = (modifiedUser, username) => {
         return `${property}='${newValue}'`;
       });
 
-
       const queryStr = `
         UPDATE users
         SET ${setColumnStatemnts.join(",")}
         WHERE user_id = $1;
         `;
-      return db.query(queryStr, [ user_id]).catch((err) => {return Promise.reject({status: 400, msg: "Bad Request: Username/email exists in table"})});
+      return db.query(queryStr, [user_id]).catch((err) => {
+        return Promise.reject({
+          status: 400,
+          msg: "Bad Request: Username/email exists in table",
+        });
+      });
     })
     .then(() => {
       return db.query(
@@ -103,5 +107,19 @@ exports.modifyUser = (modifiedUser, username) => {
     })
     .then(({ rows }) => {
       return rows[0];
+    });
+};
+
+exports.fetchFriends = (username) => {
+  return db
+    .query(`SELECT * FROM users WHERE username = $1;`, [username])
+    .then(({ rows }) => {
+      if (rows.length === 0)
+        return Promise.reject({ status: 404, msg: "User Not Found" });
+      return db
+        .query(`SELECT * FROM friendship WHERE user1_username = $1`, [username])
+        .then(({ rows }) => {
+          return rows;
+        });
     });
 };
