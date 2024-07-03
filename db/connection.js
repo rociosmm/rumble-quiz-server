@@ -1,10 +1,8 @@
 const { Pool } = require("pg");
 const ENV = process.env.NODE_ENV || "development";
 
-const pathToCorrectEnvFile = `${__dirname}/../.env.${ENV}`;
-
 require("dotenv").config({
-  path: pathToCorrectEnvFile,
+  path: `${__dirname}/../.env.${ENV}`,
 });
 
 module.exports = new Pool();
