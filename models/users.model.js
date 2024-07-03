@@ -94,7 +94,7 @@ exports.modifyUser = (modifiedUser, username) => {
         SET ${setColumnStatemnts.join(",")}
         WHERE user_id = $1;
         `;
-      return db.query(queryStr, [ user_id]);
+      return db.query(queryStr, [ user_id]).catch((err) => {return Promise.reject({status: 400, msg: "Bad Request: Username/email exists in table"})});
     })
     .then(() => {
       return db.query(
