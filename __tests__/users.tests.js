@@ -35,7 +35,7 @@ describe("/api/users/:username", () => {
   });
   test("PATCH: 200 responds with the modified user", () => {
     const newUsername = {
-      username: "Janet52",
+      username: "Janet2",
       email: "newemail@email.com",
     };
 
@@ -102,6 +102,8 @@ describe("/api/users/:username", () => {
         expect(body.msg).toBe("Bad Request: Username/email exists in table");
       });
   });
+});
+describe("/api/users/:username/friends", () => {
   test("GET: 200 should respond with all friends ", () => {
     return request(app)
       .get("/api/users/George/friends")
@@ -114,6 +116,14 @@ describe("/api/users/:username", () => {
             user2_username: expect.any(String),
           });
         });
+      });
+  });
+  test("GET: 404 responds with User Not Found if username not found", () => {
+    return request(app)
+      .get("/api/users/madeupname/friends")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User Not Found");
       });
   });
 });

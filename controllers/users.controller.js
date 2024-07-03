@@ -5,6 +5,7 @@ const {
   modifyUser,
   fetchFriends,
 } = require("../models/users.model");
+const { checkIfExists } = require("../models/users.utils");
 
 exports.getOnlineUsers = (req, res, next) => {
   fetchOnlineUsers().then((users) => {
@@ -50,7 +51,11 @@ exports.patchUser = (req, res, next) => {
 
 exports.getFriends = (req, res, next) => {
   const { username } = req.params;
-  fetchFriends(username).then((friends) => {
-    res.status(200).send({ friends });
-  });
+  fetchFriends(username)
+    .then((friends) => {
+      res.status(200).send({ friends });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
