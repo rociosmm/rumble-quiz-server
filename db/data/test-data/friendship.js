@@ -60,15 +60,7 @@ module.exports = [
         user2_id: 11
     },
     {
-        user1_id: 10,
-        user2_id: 12
-    },
-    {
         user1_id: 11,
         user2_id: 9
     },
-    {
-        user1_id: 12,
-        user2_id: 10
-    }
 ]
