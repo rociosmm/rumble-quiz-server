@@ -80,6 +80,28 @@ describe("/api/users/:username", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
+  test("PATCH: 400 responds with Bad Request when username is taken", () => {
+    const badRequest = { username: "George" };
+
+    return request(app)
+      .patch("/api/users/Janet")
+      .expect(400)
+      .send(badRequest)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request: Username/email exists in table");
+      });
+  });
+  test("PATCH: 400 responds with Bad Request when email is taken", () => {
+    const badRequest = { email: "george.bluth@reqres.in" };
+
+    return request(app)
+      .patch("/api/users/Janet")
+      .expect(400)
+      .send(badRequest)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request: Username/email exists in table");
+      });
+  });
 });
 
 describe("/api/users/", () => {

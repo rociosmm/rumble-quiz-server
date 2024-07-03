@@ -52,8 +52,8 @@ function seed({
       return db.query(`
             CREATE TABLE users (
             user_id SERIAL PRIMARY KEY,
-            username VARCHAR (20) NOT NULL,
-            email VARCHAR(50) NOT NULL,
+            username VARCHAR (20) NOT NULL UNIQUE,
+            email VARCHAR(50) NOT NULL UNIQUE,
             password VARCHAR(60),
             avatar_id INT REFERENCES avatars(avatar_id),
             is_child BOOLEAN,
