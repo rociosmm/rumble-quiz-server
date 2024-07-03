@@ -11,7 +11,6 @@ afterAll(() => db.end());
 
 describe("/api/avatars", () => {
   test("GET 200: responds with a list of avatars", () => {
-    console.log("here");
     return request(app)
       .get("/api/avatars")
       .expect(200)
