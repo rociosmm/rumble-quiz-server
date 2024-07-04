@@ -123,3 +123,30 @@ exports.fetchFriends = (username) => {
         });
     });
 };
+
+exports.addFriendship = (username, newFriend) => {
+  if (!newFriend) return Promise.reject({ status: 400, msg: "Bad Request" });
+
+  return db
+    .query(`SELECT * FROM users WHERE username = $1;`, [username])
+    .then(({ rows }) => {
+      if (rows.length === 0)
+        return Promise.reject({ status: 404, msg: "User Not Found" });
+      return db.query(`SELECT * FROM users WHERE username = $1;`, [newFriend]);
+    })
+    .then(({ rows }) => {
+      if (rows.length === 0)
+        return Promise.reject({ status: 404, msg: "User Not Found" });
+      return db.query(
+        `
+    INSERT INTO friendship (user1_username, user2_username)
+    VALUES ($1,$2)
+    RETURNING *
+    `,
+        [username, newFriend]
+      );
+    })
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
