@@ -2,7 +2,7 @@ module.exports = [
   {
     log_id: 1,
     game_id: 1,
-    player_id: 1,
+    player_username: "George",
     won_game: true,
     topic_name: 1,
     points: 100,
@@ -10,7 +10,7 @@ module.exports = [
   {
     log_id: 2,
     game_id: 1,
-    player_id: 2,
+    player_username: "Janet",
     won_game: false,
     topic_name: 1,
     points: 40,
@@ -18,7 +18,7 @@ module.exports = [
   {
     log_id: 3,
     game_id: 1,
-    player_id: 3,
+    player_username: "Emma",
     won_game: false,
     topic_name: 1,
     points: 70,
@@ -26,7 +26,7 @@ module.exports = [
   {
     log_id: 4,
     game_id: 2,
-    player_id: 1,
+    player_username: "George",
     won_game: false,
     topic_name: 1,
     points: 70,
@@ -34,7 +34,7 @@ module.exports = [
   {
     log_id: 5,
     game_id: 2,
-    player_id: 2,
+    player_username: "Janet",
     won_game: false,
     topic_name: 1,
     points: 70,
@@ -42,7 +42,7 @@ module.exports = [
   {
     log_id: 6,
     game_id: 2,
-    player_id: 3,
+    player_username: "Emma",
     won_game: false,
     topic_name: 1,
     points: 70,
