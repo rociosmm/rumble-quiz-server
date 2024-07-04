@@ -95,11 +95,11 @@ function seed({
       return db.query(`
             CREATE TABLE logs(
             log_id SERIAL PRIMARY KEY,
-            game_id VARCHAR,
-            player_id INT REFERENCES users(user_id),
-            won_game BOOLEAN,
-            points_gained INT,
-            topic_name VARCHAR(50)
+            game_id VARCHAR NOT NULL,
+            player_id INT REFERENCES users(user_id)  NOT NULL,
+            won_game BOOLEAN  NOT NULL,
+            points_gained INT DEFAULT 0,
+            topic_name VARCHAR(50) NOT NULL
             );
             `);
     })
