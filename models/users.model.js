@@ -150,3 +150,32 @@ exports.addFriendship = (username, newFriend) => {
       return rows[0];
     });
 };
+
+exports.fetchLog = (username) => {
+  return db
+    .query(
+      `
+  WITH topic_count AS (
+    SELECT topic_name, COUNT(*) as category_count
+    FROM logs
+    WHERE player_username = $1
+    GROUP BY topic_name
+    ORDER BY category_count DESC
+    LIMIT 1
+)
+    SELECT 
+      player_username,
+      CAST(COUNT(game_id) AS INTEGER) AS games_played,
+      CAST((COUNT(won_game) filter(where won_game)) AS INTEGER) AS games_won,
+      CAST(SUM(points) AS INTEGER) AS total_points,
+      (SELECT topic_name FROM topic_count) AS top_topic
+      FROM logs
+      WHERE player_username = $1
+      GROUP BY player_username;
+      `,
+      [username]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
