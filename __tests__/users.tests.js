@@ -181,6 +181,31 @@ describe("/api/users/:username/friends", () => {
   });
 });
 
+describe("/api/users/:username/logs", () => {
+  test("GET: 200 responds with game data for that user", () => {
+    return request(app)
+      .get("/api/users/George/logs")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.log).toMatchObject({
+          player_username: "George",
+          games_played: 2,
+          games_won: 1,
+          total_points: 170,
+          top_topic: "1",
+        });
+      });
+  });
+  test("GET: 404 responds with No Data Found is username is not in databse", () => {
+    return request(app)
+      .get("/api/users/MrMan/logs")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No Data Found");
+      });
+  });
+});
+
 describe("/api/users/", () => {
   test("GET: 200 responds with all online users", () => {
     return request(app)

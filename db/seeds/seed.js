@@ -96,9 +96,9 @@ function seed({
             CREATE TABLE logs(
             log_id SERIAL PRIMARY KEY,
             game_id VARCHAR NOT NULL,
-            player_id INT REFERENCES users(user_id)  NOT NULL,
+            player_username VARCHAR REFERENCES users(username) ON UPDATE CASCADE NOT NULL,
             won_game BOOLEAN  NOT NULL,
-            points_gained INT DEFAULT 0,
+            points INT DEFAULT 0,
             topic_name VARCHAR(50) NOT NULL
             );
             `);
@@ -184,13 +184,13 @@ function seed({
     })
     .then(() => {
       const logQuerystr = format(
-        `INSERT INTO logs (game_id, player_id, won_game, points_gained, topic_name) VALUES %L;`,
+        `INSERT INTO logs (game_id, player_username, won_game, points, topic_name) VALUES %L;`,
         logs.map(
-          ({ game_id, player_id, won_game, points_gained, topic_name }) => [
+          ({ game_id, player_username, won_game, points, topic_name }) => [
             game_id,
-            player_id,
+            player_username,
             won_game,
-            points_gained,
+            points,
             topic_name,
           ]
         )

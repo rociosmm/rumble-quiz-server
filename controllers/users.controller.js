@@ -6,6 +6,7 @@ const {
   modifyUser,
   fetchFriends,
   addFriendship,
+  fetchLog,
 } = require("../models/users.model");
 const { checkIfExists } = require("../models/users.utils");
 
@@ -73,4 +74,14 @@ exports.postFriendship = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getLogByUser = (req, res, next) => {
+  const { username } = req.params;
+  fetchLog(username).then((log) => {
+    res.status(200).send({ log });
+  })
+  .catch((err) => {
+    next(err)
+  });
 };
