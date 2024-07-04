@@ -16,35 +16,35 @@ describe("/api/logs", () => {
         game_id: "a1b2c3",
         player_username: "George",
         won_game: true,
-        points_gained: 100,
+        points: 100,
         topic_name: "music",
       },
       {
         game_id: "a1b2c3",
         player_username: "Janet",
         won_game: false,
-        points_gained: 80,
+        points: 80,
         topic_name: "music",
       },
       {
         game_id: "a1b2c3",
         player_username: "Emma",
         won_game: false,
-        points_gained: 60,
+        points: 60,
         topic_name: "music",
       },
       {
         game_id: "a1b2c3",
         player_username: "Charles",
         won_game: false,
-        points_gained: 40,
+        points: 40,
         topic_name: "music",
       },
       {
         game_id: "a1b2c3",
         player_username: "Eve",
         won_game: false,
-        points_gained: 20,
+        points: 20,
         topic_name: "music",
       },
     ];
@@ -61,7 +61,7 @@ describe("/api/logs", () => {
             game_id: expect.any(String),
             player_username: expect.any(String),
             won_game: expect.any(Boolean),
-            points_gained: expect.any(Number),
+            points: expect.any(Number),
             topic_name: expect.any(String),
           });
         });
@@ -83,7 +83,7 @@ describe("/api/logs", () => {
       {
         game_id: "a1b2c3",
         won_game: true,
-        points_gained: 100,
+        points: 100,
         topic_name: "music",
       },
     ];
