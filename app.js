@@ -4,6 +4,7 @@ const {
   usersRouter,
   avatarsRouter,
   soundRouter,
+  logsRouter
 } = require("./routes/index.js");
 const app = express();
 app.use(express.json());
@@ -15,6 +16,8 @@ app.use("/api/users", usersRouter);
 app.use("/api/avatars", avatarsRouter);
 
 app.use("/api/sounds", soundRouter);
+
+app.use("/api/logs", logsRouter)
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
