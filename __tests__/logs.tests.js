@@ -67,4 +67,15 @@ describe("/api/logs", () => {
         });
       });
   });
+  test("POST: 400 returns Bad Request if request body is empty", () => {
+    const gameData = [];
+
+    return request(app)
+      .post("/api/logs")
+      .send(gameData)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
 });
