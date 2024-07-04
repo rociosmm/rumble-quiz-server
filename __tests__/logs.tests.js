@@ -95,4 +95,15 @@ describe("/api/logs", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
+  test("GET: 200 responds with all the users ordered by points (desc)", () => {
+    return request(app)
+      .get("/api/logs")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.leaderboard).toHaveLength(3);
+        expect(body.leaderboard).toBeSorted("total_points", {
+          descending: true,
+        });
+      });
+  });
 });

@@ -21,9 +21,21 @@ exports.addGameDataToLog = (gameData) => {
   );
 
   return db.query(insertQueryStr).then(({ rows }) => {
-
     if (rows.length === 0)
       return Promise.reject({ status: 400, msg: "Bad Request" });
     return rows;
   });
+};
+
+exports.fetchUsersPoints = () => {
+  return db.query(`
+    SELECT 
+    player_username,
+    CAST(SUM(points) AS INTEGER) AS total_points 
+    FROM logs
+    GROUP BY player_username
+    ORDER BY total_points DESC;`)
+    .then(({rows}) => {
+      return rows
+    });
 };
