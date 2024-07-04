@@ -36,7 +36,7 @@ function seed({
         CREATE TABLE avatars(
         avatar_id SERIAL PRIMARY KEY,
         avatar_name VARCHAR(50) NOT NULL,
-        avatar_url VARCHAR(50) NOT NULL
+        avatar_url VARCHAR(150) NOT NULL
         );
         `);
     })
