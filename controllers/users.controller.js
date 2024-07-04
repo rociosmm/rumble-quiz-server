@@ -7,6 +7,7 @@ const {
   fetchFriends,
   addFriendship,
   fetchLog,
+  handleLogin,
 } = require("../models/users.model");
 const { checkIfExists } = require("../models/users.utils");
 
@@ -78,10 +79,21 @@ exports.postFriendship = (req, res, next) => {
 
 exports.getLogByUser = (req, res, next) => {
   const { username } = req.params;
-  fetchLog(username).then((log) => {
-    res.status(200).send({ log });
-  })
-  .catch((err) => {
-    next(err)
-  });
+  fetchLog(username)
+    .then((log) => {
+      res.status(200).send({ log });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.postLogin = (req, res, next) => {
+  handleLogin(req.body)
+    .then((successfulLogin) => {
+      res.status(200).send({ successfulLogin });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };

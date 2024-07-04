@@ -1,6 +1,7 @@
 const db = require("../db/connection");
 const bcrypt = require("bcrypt");
 const { checkIfExists } = require("./users.utils");
+const jwt = require("jwt-simple");
 
 exports.fetchOnlineUsers = () => {
   return db
@@ -176,7 +177,58 @@ exports.fetchLog = (username) => {
       [username]
     )
     .then(({ rows }) => {
-      if (rows.length === 0) return Promise.reject({status:404, msg: "No Data Found"})
+      if (rows.length === 0)
+        return Promise.reject({ status: 404, msg: "No Data Found" });
       return rows[0];
+    });
+};
+
+var secret = Buffer.from("fe1a1915a379f3be5394b64d14794932", "hex");
+
+exports.handleLogin = (user) => {
+  if (!user.username)
+    return Promise.reject({
+      status: 400,
+      msg: "Bad Request: Username Missing",
+    });
+  if (!user.password)
+    return Promise.reject({
+      status: 400,
+      msg: "Bad Request: Password Missing",
+    });
+  // if (!userKeys.includes("username") & !userKeys.includes("password"))
+  //   return Promise.all({ status: 400, msg: "Bad Request" });
+
+  return db
+    .query(
+      `
+    SELECT * FROM users WHERE username = $1
+    `,
+      [user.username]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0)
+        return Promise.reject({ status: 404, msg: "User Not Found" });
+      const userData = rows[0];
+      const storedPassword = rows[0].password;
+
+      return Promise.all([
+        bcrypt.compare(user.password, storedPassword),
+        userData,
+      ]);
+    })
+    .then((arr) => {
+      const passwordMatched = arr[0];
+
+      if (!passwordMatched)
+        return Promise.reject({ status: 400, msg: "Wrong password" });
+
+      const payload = arr[1];
+      delete payload.password;
+      const res = {
+        token: jwt.encode(payload, secret),
+        user: payload,
+      };
+      return res;
     });
 };
