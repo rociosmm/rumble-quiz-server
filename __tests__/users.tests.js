@@ -103,6 +103,7 @@ describe("/api/users/:username", () => {
       });
   });
 });
+
 describe("/api/users/:username/friends", () => {
   test("GET: 200 should respond with all friends ", () => {
     return request(app)
@@ -323,6 +324,26 @@ describe("/api/users/", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad Request: username");
+      });
+  });
+});
+
+describe("/api/users/login", () => {
+  test("POST: 200 returns user with json web token (jwt) on body", () => {
+    const loginData = {
+      username: "George",
+      password: "123abc",
+    };
+
+    return request(app)
+      .post("/api/users/login")
+      .send(loginData)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.successfulLogin).toMatchObject({
+          token: expect.any(String),
+          user: expect.any(Object),
+        });
       });
   });
 });

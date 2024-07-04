@@ -6,10 +6,13 @@ const {
   getFriends,
   postFriendship,
   getLogByUser,
+  postLogin
 } = require("../controllers/users.controller");
 const usersRouter = require("express").Router();
 
 usersRouter.route("/").get(getOnlineUsers).post(postNewUser);
+
+usersRouter.route("/login").post(postLogin);
 
 usersRouter.route("/:username").get(getUser).patch(patchUser);
 
