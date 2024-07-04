@@ -80,5 +80,8 @@ exports.getLogByUser = (req, res, next) => {
   const { username } = req.params;
   fetchLog(username).then((log) => {
     res.status(200).send({ log });
+  })
+  .catch((err) => {
+    next(err)
   });
 };

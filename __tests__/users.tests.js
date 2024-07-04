@@ -196,6 +196,14 @@ describe("/api/users/:username/logs", () => {
         });
       });
   });
+  test("GET: 404 responds with No Data Found is username is not in databse", () => {
+    return request(app)
+      .get("/api/users/MrMan/logs")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No Data Found");
+      });
+  });
 });
 
 describe("/api/users/", () => {
