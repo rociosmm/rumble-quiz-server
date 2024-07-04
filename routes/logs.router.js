@@ -1,5 +1,6 @@
+const {postLogs} = require("../controllers/logs.controllers")
 const logsRouter = require("express").Router();
 
-logsRouter.post("/:sound_id", postLogs);
+logsRouter.post("/", postLogs);
 
 module.exports = logsRouter;
