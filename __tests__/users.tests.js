@@ -344,6 +344,53 @@ describe("/api/users/login", () => {
           token: expect.any(String),
           user: expect.any(Object),
         });
+        expect(body.successfulLogin.user).toMatchObject({
+          user_id: 1,
+          username: "George",
+          email: "george.bluth@reqres.in",
+          avatar_id: 1,
+          is_child: false,
+          colour_theme_id: 1,
+          online: true,
+        });
+      });
+  });
+  test("POST: 404 responds with User Not Found if username not in database", () => {
+    const loginData = {
+      username: "UserNotHere",
+      password: "123abc",
+    };
+    return request(app)
+      .post("/api/users/login")
+      .send(loginData)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User Not Found");
+      });
+  });
+  test("POST: 400 responds with Wrong Password if input password does not match stored password", () => {
+    const loginData = {
+      username: "George",
+      password: "notthepassword",
+    };
+    return request(app)
+      .post("/api/users/login")
+      .send(loginData)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Wrong password");
+      });
+  });
+  test("POST: 400 responds with Bad Request if request body is missing fields", () => {
+    const loginData = {
+      username: "George",
+    };
+    return request(app)
+      .post("/api/users/login")
+      .send(loginData)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request: Password Missing");
       });
   });
 });

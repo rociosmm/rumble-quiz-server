@@ -186,6 +186,19 @@ exports.fetchLog = (username) => {
 var secret = Buffer.from("fe1a1915a379f3be5394b64d14794932", "hex");
 
 exports.handleLogin = (user) => {
+  if (!user.username)
+    return Promise.reject({
+      status: 400,
+      msg: "Bad Request: Username Missing",
+    });
+  if (!user.password)
+    return Promise.reject({
+      status: 400,
+      msg: "Bad Request: Password Missing",
+    });
+  // if (!userKeys.includes("username") & !userKeys.includes("password"))
+  //   return Promise.all({ status: 400, msg: "Bad Request" });
+
   return db
     .query(
       `
@@ -194,6 +207,8 @@ exports.handleLogin = (user) => {
       [user.username]
     )
     .then(({ rows }) => {
+      if (rows.length === 0)
+        return Promise.reject({ status: 404, msg: "User Not Found" });
       const userData = rows[0];
       const storedPassword = rows[0].password;
 
@@ -203,14 +218,17 @@ exports.handleLogin = (user) => {
       ]);
     })
     .then((arr) => {
+      const passwordMatched = arr[0];
+
+      if (!passwordMatched)
+        return Promise.reject({ status: 400, msg: "Wrong password" });
+
       const payload = arr[1];
       delete payload.password;
       const res = {
         token: jwt.encode(payload, secret),
         user: payload,
       };
-      console.log(res);
-
       return res;
     });
 };

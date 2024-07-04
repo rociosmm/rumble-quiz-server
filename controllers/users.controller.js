@@ -89,7 +89,11 @@ exports.getLogByUser = (req, res, next) => {
 };
 
 exports.postLogin = (req, res, next) => {
-  handleLogin(req.body).then((successfulLogin) => {
-    res.status(200).send({ successfulLogin });
-  });
+  handleLogin(req.body)
+    .then((successfulLogin) => {
+      res.status(200).send({ successfulLogin });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
