@@ -26,7 +26,7 @@ module.exports = [
   {
     log_id: 4,
     game_id: 2,
-    player_id: 3,
+    player_id: 1,
     won_game: false,
     topic_name: 1,
     points: 70,
@@ -34,7 +34,7 @@ module.exports = [
   {
     log_id: 5,
     game_id: 2,
-    player_id: 3,
+    player_id: 2,
     won_game: false,
     topic_name: 1,
     points: 70,
