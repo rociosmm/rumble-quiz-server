@@ -19,7 +19,11 @@ exports.addGameDataToLog = (gameData) => {
       ]
     )
   );
+
   return db.query(insertQueryStr).then(({ rows }) => {
+    console.log(rows)
+    if (rows.length === 0)
+      return Promise.reject({ status: 400, msg: "Bad Request" });
     return rows;
   });
 };

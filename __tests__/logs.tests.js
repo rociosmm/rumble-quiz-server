@@ -78,4 +78,21 @@ describe("/api/logs", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
+  test("POST: 400 returns Bad Request if request body is malformed", () => {
+    const gameData = [
+      {
+        game_id: "a1b2c3",
+        won_game: true,
+        points_gained: 100,
+        topic_name: "music",
+      },
+    ];
+    return request(app)
+      .post("/api/logs")
+      .send(gameData)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
 });
