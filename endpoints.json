@@ -1,6 +1,241 @@
 {
+  "GET /": {
+    "description": "serves up a json representation of all the available endpoints of the api"
+  },
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api",
-    "queries": []
+    "description": "serves up a json representation of all the available endpoints of the api"
+  },
+  "GET /api/users": {
+    "description": "serves all the ONLINE users",
+    "example_response": [
+      {
+        "users": [
+          {
+            "user_id": 1,
+            "username": "SparkleUnicorn",
+            "email": "sparkleunicorn@example.com",
+            "avatar_id": 1,
+            "is_child": null,
+            "colour_theme_id": 1,
+            "online": true
+          },
+          {
+            "user_id": 3,
+            "username": "DragonRider",
+            "email": "dragonrider@example.com",
+            "avatar_id": 3,
+            "is_child": null,
+            "colour_theme_id": 3,
+            "online": true
+          },
+          {
+            "user_id": 5,
+            "username": "GalacticTraveler",
+            "email": "galactictraveler@example.com",
+            "avatar_id": 5,
+            "is_child": null,
+            "colour_theme_id": 2,
+            "online": true
+          }
+        ]
+      }
+    ]
+  },
+  "POST /api/users": {
+    "description": "creates a new user",
+    "example_request": {
+      "username": "newUser",
+      "email": "myemail@email.com",
+      "password": "reallygoodsecure",
+      "avatar_id": 1,
+      "is_child": "false",
+      "colour_theme_id": 1,
+      "online": true
+    },
+    "example_response": {
+      "username": "newUser",
+      "email": "myemail@email.com",
+      "avatar_id": 1,
+      "is_child": "false",
+      "colour_theme_id": 1,
+      "online": true
+    }
+  },
+  "POST /api/users/login": {
+    "description": "posts a new log in request",
+    "example_request": {
+      "username": "newUser",
+      "password": "reallygoodsecure"
+    },
+    "example_response": {
+      "token": "jwt-generated-token",
+      "user": {
+        "username": "newUser",
+        "email": "myemail@email.com",
+        "avatar_id": 1,
+        "is_child": "false",
+        "colour_theme_id": 1,
+        "online": true
+      }
+    }
+  },
+  "GET /api/users/:username": {
+    "description": "serves an individual user",
+    "example_response": {
+      "user": {
+        "user_id": 1,
+        "username": "SparkleUnicorn",
+        "email": "sparkleunicorn@example.com",
+        "avatar_id": 1,
+        "is_child": null,
+        "colour_theme_id": 1,
+        "online": true
+      }
+    }
+  },
+  "PATCH /api/users/:username": {
+    "description": "patches an existing users details (NOT PASSWORD)",
+    "example_request": { "username": "SparkleUnicorn", "online": false },
+    "example_response": {
+      "modifiedUser": {
+        "user_id": 1,
+        "username": "SparkleUnicorn",
+        "email": "sparkleunicorn@example.com",
+        "avatar_id": 1,
+        "is_child": null,
+        "colour_theme_id": 1,
+        "online": false
+      }
+    }
+  },
+  "GET /api/users/:username/friends": {
+    "description": "serves all the friends of an individual user",
+    "example_response": [
+      {
+        "friends": {
+          "user1_username": "SparkleUnicorn",
+          "user2_username": "NinjaWarrior"
+        }
+      }
+    ]
+  },
+  "POST /api/users/:username/friends": {
+    "description": "serves all the friends of an individual user",
+    "example_request": { "newFriend": "myNewPal" },
+    "example_response": {
+      "friends": {
+        "user1_username": "SparkleUnicorn",
+        "user2_username": "myNewPal"
+      }
+    }
+  },
+  "GET /api/users/:username/logs": {
+    "description": "serves summary statistics for an individual user",
+    "example_response": {
+      "log": {
+        "player_username": "SparkleUnicorn",
+        "games_played": 2,
+        "games_won": 2,
+        "total_points": 350,
+        "top_topic": "Math"
+      }
+    }
+  },
+  "GET /api/logs": {
+    "description": "serves total points for each user",
+    "example_response": {
+      "leaderboard": [
+        { "player_username": "SparkleUnicorn", "total_points": 350 },
+        { "player_username": "MysticMage", "total_points": 350 },
+        { "player_username": "FantasyFae", "total_points": 350 },
+        { "player_username": "GalacticTraveler", "total_points": 290 }
+      ]
+    }
+  },
+  "POST /api/logs": {
+    "description": "posts information for each player in each game and serves the posted data",
+    "example_request": [
+      {
+        "game_id": "a1b2c3",
+        "player_username": "George",
+        "won_game": true,
+        "points": 100,
+        "topic_name": "music"
+      },
+      {
+        "game_id": "a1b2c3",
+        "player_username": "Janet",
+        "won_game": false,
+        "points": 80,
+        "topic_name": "music"
+      },
+      {
+        "game_id": "a1b2c3",
+        "player_username": "Emma",
+        "won_game": false,
+        "points": 60,
+        "topic_name": "music"
+      }
+    ],
+    "example_response": [
+      {
+        "log_id": 1,
+        "game_id": "a1b2c3",
+        "player_username": "George",
+        "won_game": true,
+        "points": 100,
+        "topic_name": "music"
+      },
+      {
+        "log_id": 2,
+        "game_id": "a1b2c3",
+        "player_username": "Janet",
+        "won_game": false,
+        "points": 80,
+        "topic_name": "music"
+      },
+      {
+        "log_id": 3,
+        "game_id": "a1b2c3",
+        "player_username": "Emma",
+        "won_game": false,
+        "points": 60,
+        "topic_name": "music"
+      }
+    ]
+  },
+  "GET /api/avatars": {
+    "description": "serves all the avatars",
+    "example_response": [
+      {
+        "avatars": [
+          {
+            "avatar_id": 1,
+            "avatar_name": "Bear",
+            "avatar_url": "https://github.com/nkytruong/rumble-quiz-app/blob/main/assets/avatars/icons8-bear-48.png"
+          },
+          {
+            "avatar_id": 2,
+            "avatar_name": "Elephant",
+            "avatar_url": "https://github.com/nkytruong/rumble-quiz-app/blob/main/assets/avatars/icons8-elephant-64.png"
+          },
+          {
+            "avatar_id": 3,
+            "avatar_name": "Gazelle",
+            "avatar_url": "https://github.com/nkytruong/rumble-quiz-app/blob/main/assets/avatars/icons8-gazelle-64.png"
+          }
+        ]
+      }
+    ]
+  },
+  "GET /api/avatars/:avatar_id": {
+    "description": "serves an individual avatar",
+    "example_response": {
+      "avatar": {
+        "avatar_id": 1,
+        "avatar_name": "Bear",
+        "avatar_url": "https://github.com/nkytruong/rumble-quiz-app/blob/main/assets/avatars/icons8-bear-48.png"
+      }
+    }
   }
 }
