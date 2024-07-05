@@ -1,66 +1,42 @@
 module.exports = [
-    {
-        user1_id: 1,
-        user2_id: 2
-    },
-    {
-        user1_id: 1,
-        user2_id: 4
-    },
-    {
-        user1_id: 2,
-        user2_id: 1
-    },
-    {
-        user1_id: 2,
-        user2_id: 3
-    },
-    {
-        user1_id: 3,
-        user2_id: 2
-    },
-    {
-        user1_id: 3,
-        user2_id: 6
-    },
-    {
-        user1_id: 4,
-        user2_id: 1
-    },
-    {
-        user1_id: 4,
-        user2_id: 8
-    },
-    {
-        user1_id: 5,
-        user2_id: 7
-    },
-    {
-        user1_id: 5,
-        user2_id: 8
-    },
-    {
-        user1_id: 6,
-        user2_id: 3
-    },
-    {
-        user1_id: 7,
-        user2_id: 5
-    },
-    {
-        user1_id: 8,
-        user2_id: 4
-    },
-    {
-        user1_id: 8,
-        user2_id: 5
-    },
-    {
-        user1_id: 9,
-        user2_id: 11
-    },
-    {
-        user1_id: 11,
-        user2_id: 9
-    },
-]
+  { user1_username: "SparkleUnicorn", user2_username: "NinjaWarrior" },
+  { user1_username: "DragonRider", user2_username: "PirateQueen" },
+  { user1_username: "GalacticTraveler", user2_username: "MysticMage" },
+  { user1_username: "RobotOverlord", user2_username: "CosmicKnight" },
+  { user1_username: "JungleExplorer", user2_username: "UnderwaterHero" },
+  { user1_username: "StarlightDreamer", user2_username: "ThunderBolt" },
+  { user1_username: "PhoenixRising", user2_username: "MagicCarpet" },
+  { user1_username: "SupernovaBlast", user2_username: "WhimsicalWizard" },
+  { user1_username: "CyberSamurai", user2_username: "FantasyFae" },
+  { user1_username: "SkyPirate", user2_username: "LightningFlash" },
+  { user1_username: "NinjaWarrior", user2_username: "DragonRider" },
+  { user1_username: "PirateQueen", user2_username: "GalacticTraveler" },
+  { user1_username: "MysticMage", user2_username: "RobotOverlord" },
+  { user1_username: "CosmicKnight", user2_username: "JungleExplorer" },
+  { user1_username: "UnderwaterHero", user2_username: "StarlightDreamer" },
+  { user1_username: "ThunderBolt", user2_username: "PhoenixRising" },
+  { user1_username: "MagicCarpet", user2_username: "SupernovaBlast" },
+  { user1_username: "WhimsicalWizard", user2_username: "CyberSamurai" },
+  { user1_username: "FantasyFae", user2_username: "SkyPirate" },
+  { user1_username: "LightningFlash", user2_username: "SparkleUnicorn" },
+  { user1_username: "DragonRider", user2_username: "RobotOverlord" },
+  { user1_username: "CosmicKnight", user2_username: "UnderwaterHero" },
+  { user1_username: "JungleExplorer", user2_username: "PhoenixRising" },
+  { user1_username: "MagicCarpet", user2_username: "WhimsicalWizard" },
+  { user1_username: "SkyPirate", user2_username: "NinjaWarrior" },
+  { user1_username: "GalacticTraveler", user2_username: "StarlightDreamer" },
+  { user1_username: "SupernovaBlast", user2_username: "FantasyFae" },
+  { user1_username: "CyberSamurai", user2_username: "ThunderBolt" },
+  { user1_username: "PirateQueen", user2_username: "DragonRider" },
+  { user1_username: "WhimsicalWizard", user2_username: "CosmicKnight" },
+  { user1_username: "RobotOverlord", user2_username: "SkyPirate" },
+  { user1_username: "UnderwaterHero", user2_username: "MagicCarpet" },
+  { user1_username: "PhoenixRising", user2_username: "CyberSamurai" },
+  { user1_username: "ThunderBolt", user2_username: "StarlightDreamer" },
+  { user1_username: "FantasyFae", user2_username: "SparkleUnicorn" },
+  { user1_username: "NinjaWarrior", user2_username: "SupernovaBlast" },
+  { user1_username: "JungleExplorer", user2_username: "GalacticTraveler" },
+  { user1_username: "DragonRider", user2_username: "LightningFlash" },
+  { user1_username: "StarlightDreamer", user2_username: "PirateQueen" },
+  { user1_username: "MysticMage", user2_username: "FantasyFae" },
+];
