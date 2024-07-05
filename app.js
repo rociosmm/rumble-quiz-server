@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const http = require("http");
+const { configureSockets } = require("./sockets/configure-sockets.js");
 
 const {
   apiRouter,
@@ -13,7 +15,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/", apiRouter);
+const server = http.createServer(app);
+
+configureSockets(server);
+
 app.use("/api", apiRouter);
 
 app.use("/api/users", usersRouter);
@@ -40,4 +45,4 @@ app.use((err, req, res, next) => {
   }
 });
 
-module.exports = app;
+module.exports = { app, server };
