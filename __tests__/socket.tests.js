@@ -2,7 +2,7 @@
 const { Server } = require("socket.io");
 const { server } = require("../app");
 const { configureSockets } = require("../sockets/configure-sockets");
-const { checkRoomExists } = require("../sockets/create-room");
+const { checkRoomExists, joinRoom } = require("../sockets/create-room");
 const ioc = require("socket.io-client");
 const { config } = require("dotenv");
 
@@ -67,8 +67,8 @@ describe("RumbleQuiz", () => {
 
 describe("Creating and joining rooms", () => {
   test("checkRoomExists() should return true if room exists", () => {
-    const topic_id = "new-room";
-    serverSocket.join("new-room");
+    const topic_id = "12";
+    serverSocket.join(topic_id);
 
     const output = checkRoomExists(io, topic_id);
 
@@ -79,5 +79,14 @@ describe("Creating and joining rooms", () => {
 
     expect(output).toBeFalsy();
   });
-  
+  test("createRoom() puts socket in room of the topic_id", () => {
+    const topic_id = "12";
+    joinRoom(io, topic_id, serverSocket);
+
+    io.of("/").adapter.on("create-room", (room) => {
+      expect(room).toBe(topic_id);
+    });
+    expect(io.sockets.adapter.rooms.size).toBe(2);
+    expect(io.sockets.adapter.rooms.get(topic_id)).toBeTruthy();
+  });
 });
