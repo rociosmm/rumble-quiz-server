@@ -3,9 +3,13 @@ const { Server } = require("socket.io");
 const { server } = require("../app");
 const { configureSockets } = require("../sockets/configure-sockets");
 const { checkRoomExists, joinRoom } = require("../sockets/create-room");
-const { createGameData, ongoingGames } = require("../models/game.model");
+const {
+  addPlayerToGame,
+  createGameData,
+  ongoingGames,
+} = require("../models/game.model");
 const ioc = require("socket.io-client");
-const { config } = require("dotenv");
+const db = require("../db/connection");
 
 function waitFor(socket, event) {
   return new Promise((resolve) => {
@@ -34,6 +38,7 @@ beforeEach(() => {
 afterAll(() => {
   io.close();
   clientSocket.disconnect();
+  db.end();
 });
 
 describe("RumbleQuiz", () => {
@@ -105,14 +110,37 @@ describe("Creating and joining rooms", () => {
       players_active: [],
       players_eliminated: [],
       round_counter: 1,
-      avatar_urls: [],
+      avatar_urls: {},
       points: {},
     });
     serverSocket.leave(topic_id);
   });
-  test.todo(
-    "joinRoom invokes addPlayerToGame(), thereby updating ongoingGames with player data"
-  );
+  test("joinRoom invokes addPlayerToGame(), thereby updating ongoingGames with player data", () => {
+    const topic_id = "43";
+    const examplePlayer = {
+      username: "SparkleUnicorn",
+      avatar_url: "wwww.example.com/image.png",
+    };
+
+    joinRoom(
+      io,
+      topic_id,
+      serverSocket,
+      examplePlayer.username,
+      examplePlayer.avatar_url
+    );
+
+    expect(ongoingGames[topic_id]).toMatchObject({
+      players_active: ["SparkleUnicorn"],
+      players_eliminated: [],
+      round_counter: 1,
+      avatar_urls: {
+        SparkleUnicorn: "wwww.example.com/image.png",
+      },
+      points: { SparkleUnicorn: 0 },
+    });
+    serverSocket.leave(topic_id);
+  });
   test("createGameData() creates initial data for a room that has just been created", () => {
     const topic_id = "14";
     createGameData(topic_id);
@@ -122,12 +150,29 @@ describe("Creating and joining rooms", () => {
       players_active: [],
       players_eliminated: [],
       round_counter: 1,
-      avatar_urls: [],
+      avatar_urls: {},
       points: {},
     });
     serverSocket.leave(topic_id);
   });
-  test.todo(
-    "addPlayerToGame() adds player details to correct game room in ongoingGames object"
-  );
+  test("addPlayerToGame() adds player details to correct game room in ongoingGames object", () => {
+    const topic_id = "72";
+    const examplePlayer = {
+      username: "SparkleUnicorn",
+      avatar_url: "wwww.example.com/image.png",
+    };
+
+    createGameData(topic_id);
+    addPlayerToGame(examplePlayer.username, examplePlayer.avatar_url, topic_id);
+    expect(ongoingGames[topic_id]).toMatchObject({
+      players_active: ["SparkleUnicorn"],
+      players_eliminated: [],
+      round_counter: 1,
+      avatar_urls: {
+        SparkleUnicorn: "wwww.example.com/image.png",
+      },
+      points: { SparkleUnicorn: 0 },
+    });
+    serverSocket.leave(topic_id);
+  });
 });
