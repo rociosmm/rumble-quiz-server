@@ -4,7 +4,7 @@ const socketIO = require("socket.io");
 const { joinRoom } = require("./create-room");
 const { ongoingGames } = require("../models/game.model");
 
-exports.configureSockets = (server, ROOM_LIMIT = 10) => {
+exports.configureSockets = (server, ROOM_LIMIT = 1) => {
   const io = socketIO(server, {
     cors: {
       origin: "*",
