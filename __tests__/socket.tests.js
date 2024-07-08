@@ -20,7 +20,7 @@ function waitFor(socket, event) {
 let io, serverSocket, clientSocket;
 
 beforeAll((done) => {
-  io = configureSockets(server);
+  io = configureSockets(server, 1);
   server.listen(() => {
     const port = server.address().port;
     clientSocket = ioc(`http://localhost:${port}`);
@@ -128,6 +128,7 @@ describe("Creating and joining rooms", () => {
       io,
       topic_id,
       serverSocket,
+      1,
       examplePlayer.username,
       examplePlayer.avatar_url
     );
@@ -204,9 +205,25 @@ describe("Creating and joining rooms", () => {
 
     serverSocket.leave(topic_id);
   });
-  test.todo(
-    "When room reaches predefined limit, the server emits game-start event to client with game avatars."
-  );
+  test("When room reaches predefined limit, the server emits game-start event to client with game avatars.", async () => {
+    const topic_id = "64";
+    const examplePlayer = {
+      username: "SparkleUnicorn",
+      avatar_url: "wwww.example.com/image.png",
+    };
+
+    await new Promise((resolve) => {
+      clientSocket.emit("topic-selected", topic_id, examplePlayer, () => {
+        console.log("client emitted: topic-selected");
+        resolve();
+      });
+    });
+
+    clientSocket.on("avatars", (arg) => {
+      expect(arg).toEqual([{
+        SparkleUnicorn: "wwww.example.com/image.png"}])
+    })
+  })
 });
 
 //describe("Game play")

@@ -4,13 +4,13 @@ const checkRoomExists = (io, topic_id) => {
   return rooms.has(topic_id);
 };
 
-const joinRoom = (io, topic_id, socket, username, avatarUrl) => {
+const joinRoom = (io, topic_id, socket, ROOM_LIMIT, username, avatarUrl) => {
   const room = io.sockets.adapter.rooms.get(topic_id);
   const roomExists = checkRoomExists(io, topic_id);
   if (!roomExists) {
     socket.join(`${topic_id}`);
     createGameData(topic_id);
-  } else if (roomExists & (room.size < 10)) {
+  } else if (roomExists & (room.size < ROOM_LIMIT)) {
     socket.join(`${topic_id}`);
   } else {
     //when there are already 10 people inside the room.
