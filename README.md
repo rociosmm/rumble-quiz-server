@@ -20,8 +20,8 @@ npm i
    should go in root directory
 
 ```
-echo "PGDATABASE=nc_news_test" > .env.test
-echo "PGDATABASE=nc_news" > .env.development
+echo "PGDATABASE=rumble_quiz_test" > .env.test
+echo "PGDATABASE=rumble_quiz" > .env.development
 ```
 
 4. Setup and seed local databases
