@@ -4,7 +4,8 @@ const socketIO = require("socket.io");
 const { joinRoom } = require("./create-room");
 const { ongoingGames } = require("../models/game.model");
 
-exports.configureSockets = (server, ROOM_LIMIT = 1) => {
+ROOM_LIMIT = 1;
+exports.configureSockets = (server) => {
   const io = socketIO(server, {
     cors: {
       origin: "*",
@@ -19,6 +20,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
       if (callback) callback();
       console.log(`${socket.id} selected a topic`);
 
+      console.log(topic_id, player);
       await joinRoom(
         io,
         topic_id,
@@ -29,6 +31,8 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
       );
 
       const room = io.sockets.adapter.rooms.get(topic_id);
+
+      console.log(room);
 
       if (room.size && room.size === ROOM_LIMIT) {
         io.to(topic_id).emit("avatars", ongoingGames[topic_id].avatar_urls);
