@@ -1,5 +1,3 @@
-const { fetchAvatarById } = require("../models/avatars.model");
-
 const ongoingGames = {};
 
 const createGameData = (topic_id) => {
@@ -7,7 +5,7 @@ const createGameData = (topic_id) => {
     players_active: [],
     players_eliminated: [],
     round_counter: 1,
-    avatar_urls: {},
+    avatar_urlsmod: {},
     points: {},
   };
 };
