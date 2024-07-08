@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Socket.io Client</title>
-  <script src="/socket.io/socket.io.js"></script> <!-- Change here -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const socket = io('http://localhost:9090'); // Ensure this URL matches your server address and port
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket.io Client</title>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const socket = io(); // Ensure this URL matches your server address and port
 
-      socket.on('connect', () => {
-        console.log('Connected to server with id: ' + socket.id);
-      });
+        socket.on("connect", () => {
+          console.log("Connected to server with id: " + socket.id);
+        });
 
-      socket.on('disconnect', () => {
-        console.log('Disconnected from server');
+        socket.on("disconnect", () => {
+          console.log("Disconnected from server");
+        });
       });
-    });
-  </script>
-</head>
-<body>
-  <h1>Socket.io Client</h1>
-</body>
+    </script>
+  </head>
+  <body>
+    <h1>Socket.io Client</h1>
+  </body>
 </html>
