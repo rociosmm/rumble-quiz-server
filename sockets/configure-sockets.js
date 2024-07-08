@@ -14,10 +14,12 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
 
   io.on("connection", (socket) => {
     console.log(`${socket.id} connected to server`);
-    socket.on("topic-selected", (topic_id, player, callback) => {
+
+    socket.on("topic-selected", async (topic_id, player, callback) => {
       if (callback) callback();
       console.log(`${socket.id} selected a topic`);
-      joinRoom(
+
+      await joinRoom(
         io,
         topic_id,
         socket,

@@ -4,7 +4,14 @@ const checkRoomExists = (io, topic_id) => {
   return rooms.has(topic_id);
 };
 
-const joinRoom = (io, topic_id, socket, ROOM_LIMIT, username, avatarUrl) => {
+const joinRoom = async (
+  io,
+  topic_id,
+  socket,
+  ROOM_LIMIT,
+  username,
+  avatarUrl
+) => {
   const room = io.sockets.adapter.rooms.get(topic_id);
   const roomExists = checkRoomExists(io, topic_id);
   if (!roomExists) {
