@@ -31,14 +31,16 @@ beforeAll((done) => {
   });
 });
 
-beforeEach(() => {
+beforeEach((done) => {
   for (const game in ongoingGames) delete ongoingGames[game];
+  done();
 });
 
-afterAll(() => {
+afterAll((done) => {
   io.close();
   clientSocket.disconnect();
   db.end();
+  done();
 });
 
 describe("RumbleQuiz", () => {
@@ -175,4 +177,38 @@ describe("Creating and joining rooms", () => {
     });
     serverSocket.leave(topic_id);
   });
+  test("On topic-selected event from client, server invokes joinRoom() function", async () => {
+    const topic_id = "25";
+
+    const examplePlayer = {
+      username: "SparkleUnicorn",
+      avatar_url: "wwww.example.com/image.png",
+    };
+
+    await new Promise((resolve) => {
+      clientSocket.emit("topic-selected", topic_id, examplePlayer, () => {
+        console.log("client emitted");
+        resolve();
+      });
+    });
+
+    expect(ongoingGames[topic_id]).toMatchObject({
+      players_active: ["SparkleUnicorn"],
+      players_eliminated: [],
+      round_counter: 1,
+      avatar_urls: {
+        SparkleUnicorn: "wwww.example.com/image.png",
+      },
+      points: { SparkleUnicorn: 0 },
+    });
+
+    serverSocket.leave(topic_id);
+  });
+  test.todo(
+    "When room reaches predefined limit, the server emits game-start event to client with game avatars."
+  );
 });
+
+//describe("Game play")
+
+//describe("Game end")
