@@ -1,7 +1,8 @@
 module.exports = [
   {
     avatar_name: "Bear",
-    avatar_url: "../../../assets/avatars/icons8-bear-48.png",
+    avatar_url:
+      "https://raw.githubusercontent.com/nkytruong/rumble-quiz-app/main/assets/avatars/icons8-bear-48.png",
   },
   {
     avatar_name: "Elephant",
