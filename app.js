@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const http = require("http");
+const path = require("path");
 const { configureSockets } = require("./sockets/configure-sockets.js");
 
 const {
@@ -14,6 +15,8 @@ const {
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "public")));
 
 const server = http.createServer(app);
 
