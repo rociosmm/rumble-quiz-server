@@ -34,9 +34,9 @@ exports.configureSockets = (server) => {
 
       console.log(room);
 
-      if (room.size && room.size === ROOM_LIMIT) {
-        io.to(topic_id).emit("avatars", ongoingGames[topic_id].avatar_urls);
-      }
+      // if (room.size && room.size === ROOM_LIMIT) {
+      io.to(topic_id).emit("avatars", ongoingGames[topic_id].avatar_urls);
+      // }
     });
     // socket.on("disconnect", disconnect);
   });
