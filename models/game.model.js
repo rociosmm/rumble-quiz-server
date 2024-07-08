@@ -5,7 +5,7 @@ const createGameData = (topic_id) => {
     players_active: [],
     players_eliminated: [],
     round_counter: 1,
-    avatar_urlsmod: {},
+    avatar_urls: {},
     points: {},
   };
 };
