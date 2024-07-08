@@ -15,6 +15,8 @@ exports.configureSockets = (server, ROOM_LIMIT = 10) => {
   io.on("connection", (socket) => {
     console.log(`${socket.id} connected to server`);
     socket.on("topic-selected", (topic_id, player, callback) => {
+      if (callback) callback();
+      console.log(`${socket.id} selected a topic`);
       joinRoom(
         io,
         topic_id,
@@ -26,11 +28,9 @@ exports.configureSockets = (server, ROOM_LIMIT = 10) => {
 
       const room = io.sockets.adapter.rooms.get(topic_id);
 
-      if (room.size === ROOM_LIMIT) {
+      if (room.size && room.size === ROOM_LIMIT) {
         io.to(topic_id).emit("avatars", ongoingGames[topic_id].avatar_urls);
       }
-
-      if (callback) callback();
     });
     // socket.on("disconnect", disconnect);
   });
