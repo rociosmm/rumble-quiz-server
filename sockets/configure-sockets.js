@@ -10,7 +10,7 @@ const openTdb_url = axios.create({
   baseURL: "https://opentdb.com",
 });
 
-exports.configureSockets = (server, ROOM_LIMIT = 4) => {
+exports.configureSockets = (server, ROOM_LIMIT = 1) => {
   const io = socketIO(server, {
     cors: {
       origin: "*",
@@ -58,6 +58,16 @@ exports.configureSockets = (server, ROOM_LIMIT = 4) => {
             });
 
             io.to(topic_id).emit("question", questions[0]);
+            io.on(answer, (answerData) => {
+
+              const game = ongoingGames[topic_id]
+
+              game.round_counter++
+              if(answerData.eliminated){
+
+              }
+
+            })
 
           })
           .catch((err) => {
