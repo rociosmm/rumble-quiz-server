@@ -103,11 +103,11 @@ describe("Creating and joining rooms", () => {
     expect(io.sockets.adapter.rooms.get(topic_id)).toBeTruthy();
     serverSocket.leave(topic_id);
   });
-  test("joinRoom() invokes createGameData() if checkRoomExists() is falsy", () => {
+  test("joinRoom() invokes createGameData() if checkRoomExists() is falsy", async () => {
     const topic_id = "16";
     expect(ongoingGames).toEqual({});
 
-    joinRoom(io, topic_id, serverSocket);
+    await joinRoom(io, topic_id, serverSocket);
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: [],
       players_eliminated: [],
@@ -117,14 +117,14 @@ describe("Creating and joining rooms", () => {
     });
     serverSocket.leave(topic_id);
   });
-  test("joinRoom invokes addPlayerToGame(), thereby updating ongoingGames with player data", () => {
+  test("joinRoom invokes addPlayerToGame(), thereby updating ongoingGames with player data", async () => {
     const topic_id = "43";
     const examplePlayer = {
       username: "SparkleUnicorn",
       avatar_url: "wwww.example.com/image.png",
     };
 
-    joinRoom(
+    await joinRoom(
       io,
       topic_id,
       serverSocket,
@@ -188,7 +188,6 @@ describe("Creating and joining rooms", () => {
 
     await new Promise((resolve) => {
       clientSocket.emit("topic-selected", topic_id, examplePlayer, () => {
-        console.log("client emitted");
         resolve();
       });
     });
@@ -208,24 +207,27 @@ describe("Creating and joining rooms", () => {
   test("When room reaches predefined limit, the server emits game-start event to client with game avatars.", async () => {
     const topic_id = "64";
     const examplePlayer = {
-      username: "SparkleUnicorn",
+      username: "MrMan",
       avatar_url: "wwww.example.com/image.png",
     };
 
-    await new Promise((resolve) => {
-      clientSocket.emit("topic-selected", topic_id, examplePlayer, () => {
-        console.log("client emitted: topic-selected");
-        resolve();
+    clientSocket.on("avatars", (avatars) => {
+      console.log(avatars, "<<avatars", topic_id);
+      expect(avatars).toEqual({
+        MrMan: "wwww.example.com/image.png",
       });
     });
 
-    clientSocket.on("avatars", (arg) => {
-      expect(arg).toEqual([{
-        SparkleUnicorn: "wwww.example.com/image.png"}])
-    })
-  })
+    await new Promise((resolve) => {
+      clientSocket.emit("topic-selected", topic_id, examplePlayer, () => {
+        resolve();
+      });
+    });
+    serverSocket.leave(topic_id);
+
+    return waitFor(clientSocket, "avatars");
+  });
 });
 
-//describe("Game play")
 
 //describe("Game end")

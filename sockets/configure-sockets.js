@@ -4,8 +4,7 @@ const socketIO = require("socket.io");
 const { joinRoom } = require("./create-room");
 const { ongoingGames } = require("../models/game.model");
 
-ROOM_LIMIT = 1;
-exports.configureSockets = (server) => {
+exports.configureSockets = (server, ROOM_LIMIT = 4) => {
   const io = socketIO(server, {
     cors: {
       origin: "*",
@@ -13,14 +12,14 @@ exports.configureSockets = (server) => {
     },
   });
 
-  io.on("connection", (socket) => {
+  io.on("connection", async (socket) => {
     console.log(`${socket.id} connected to server`);
 
     socket.on("topic-selected", async (topic_id, player, callback) => {
       if (callback) callback();
+
       console.log(`${socket.id} selected a topic`);
 
-      console.log(topic_id, player);
       await joinRoom(
         io,
         topic_id,
@@ -32,11 +31,15 @@ exports.configureSockets = (server) => {
 
       const room = io.sockets.adapter.rooms.get(topic_id);
 
-      console.log(room);
-
-      // if (room.size && room.size === ROOM_LIMIT) {
-      io.to(topic_id).emit("avatars", ongoingGames[topic_id].avatar_urls);
-      // }
+      if (room.size === ROOM_LIMIT) {
+        io.to(topic_id).emit(
+          "avatars",
+          ongoingGames[topic_id].avatar_urls,
+          () => {
+            console.log(`Avatars emitted to room: ${topic_id}`);
+          }
+        );
+      }
     });
     // socket.on("disconnect", disconnect);
   });
