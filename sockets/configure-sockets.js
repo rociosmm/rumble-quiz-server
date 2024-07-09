@@ -51,6 +51,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 4) => {
             `/api.php?amount=10&category=${topic_id}&difficulty=medium&type=multiple`
           )
           .then(({ data }) => {
+            const topicName = data.results[0].category;
             const questions = data.results.map((response) => {
               const { question, correct_answer, incorrect_answers } = response;
               return { question, correct_answer, incorrect_answers };
