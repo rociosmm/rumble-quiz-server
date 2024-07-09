@@ -58,7 +58,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
             });
 
             io.to(topic_id).emit("question", questions[0]);
-            io.on(answer, (answerData) => {
+            io.on("answer", (answerData) => {
 
               const game = ongoingGames[topic_id]
 
