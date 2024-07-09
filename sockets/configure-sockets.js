@@ -48,7 +48,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 4) => {
 
         await openTdb_url
           .get(
-            `/api.php?amount=10&category=${topic_id}&difficulty=medium&type=multiple`
+            `/api.php?amount=${ROOM_LIMIT}&category=${topic_id}&difficulty=medium&type=multiple`
           )
           .then(({ data }) => {
             const topicName = data.results[0].category;
@@ -56,7 +56,9 @@ exports.configureSockets = (server, ROOM_LIMIT = 4) => {
               const { question, correct_answer, incorrect_answers } = response;
               return { question, correct_answer, incorrect_answers };
             });
+
             io.to(topic_id).emit("question", questions[0]);
+
           })
           .catch((err) => {
             console.log("Error getting data from optentdb:", err);
