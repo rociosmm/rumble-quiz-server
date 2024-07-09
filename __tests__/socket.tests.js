@@ -229,7 +229,7 @@ describe("Creating and joining rooms", () => {
   });
 });
 
-describe.only("Game play", () => {
+describe("Game play", () => {
   test("Requests questions for specified topic_id", async () => {
     const topic_id = "13";
     const examplePlayer = {
@@ -258,6 +258,41 @@ describe.only("Game play", () => {
     });
 
     return waitFor(clientSocket, "question");
+  });
+  test.only("ongoingGames data gets updated with round data", async () => {
+    const topic_id = "15";
+    const examplePlayer = {
+      username: "ReadyPlayerOne",
+      avatar_url: "wwww.example.com/image.png",
+    };
+
+    clientSocket.on("question", (question) => {
+      const answersObject = {};
+      answersObject[examplePlayer.username] = {
+        eliminated: true,
+        points: 7,
+      };
+
+      clientSocket.emit("answer", answersObject);
+    });
+
+    await new Promise((resolve) => {
+      clientSocket.emit("topic-selected", topic_id, examplePlayer, () => {
+        resolve();
+      });
+    });
+
+    expect(
+      ongoingGames[topic_id].toEqual({
+        players_active: [],
+        players_eliminated: ["ReadyPlayerOne"],
+        round_counter: 2,
+        avatar_urls: {
+          ReadyPlayerOne: "wwww.example.com/image.png",
+        },
+        points: { ReadyPlayerOne: 7 },
+      })
+    );
   });
 });
 
