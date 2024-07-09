@@ -4,7 +4,7 @@ const createGameData = (topic_id) => {
   ongoingGames[topic_id] = {
     players_active: [],
     players_eliminated: [],
-    round_counter: 1,
+    round_counter: 0,
     avatar_urls: {},
     points: {},
   };

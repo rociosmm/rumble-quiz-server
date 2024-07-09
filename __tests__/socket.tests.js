@@ -112,7 +112,7 @@ describe("Creating and joining rooms", () => {
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: [],
       players_eliminated: [],
-      round_counter: 1,
+      round_counter: 0,
       avatar_urls: {},
       points: {},
     });
@@ -137,7 +137,7 @@ describe("Creating and joining rooms", () => {
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: ["SparkleUnicorn"],
       players_eliminated: [],
-      round_counter: 1,
+      round_counter: 0,
       avatar_urls: {
         SparkleUnicorn: "wwww.example.com/image.png",
       },
@@ -153,7 +153,7 @@ describe("Creating and joining rooms", () => {
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: [],
       players_eliminated: [],
-      round_counter: 1,
+      round_counter: 0,
       avatar_urls: {},
       points: {},
     });
@@ -171,7 +171,7 @@ describe("Creating and joining rooms", () => {
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: ["SparkleUnicorn"],
       players_eliminated: [],
-      round_counter: 1,
+      round_counter: 0,
       avatar_urls: {
         SparkleUnicorn: "wwww.example.com/image.png",
       },
@@ -196,7 +196,7 @@ describe("Creating and joining rooms", () => {
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: ["SparkleUnicorn"],
       players_eliminated: [],
-      round_counter: 1,
+      round_counter: 0,
       avatar_urls: {
         SparkleUnicorn: "wwww.example.com/image.png",
       },
@@ -281,7 +281,7 @@ describe("Game play", () => {
       expect(ongoingGames[topic_id]).toMatchObject({
         players_active: [],
         players_eliminated: ["ReadyPlayerOne"],
-        round_counter: 2,
+        round_counter: 1,
         avatar_urls: {
           ReadyPlayerOne:
             "https://img.icons8.com/?size=100&id=63688&format=png&color=000000",
