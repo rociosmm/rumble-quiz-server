@@ -15,13 +15,13 @@ const joinRoom = async (
   const room = io.sockets.adapter.rooms.get(topic_id);
   const roomExists = checkRoomExists(io, topic_id);
   if (!roomExists) {
-    socket.join(`${topic_id}`);
+    await socket.join(`${topic_id}`);
     createGameData(topic_id);
   } else if (roomExists & (room.size < ROOM_LIMIT)) {
-    socket.join(`${topic_id}`);
+    await socket.join(`${topic_id}`);
   } else {
-    //when there are already 10 people inside the room.
-    socket.emit(addedToRoom, "full");
+    //when there are already x people inside the room.
+    await socket.emit("avatars", "room-full");
   }
   addPlayerToGame(username, avatarUrl, topic_id);
 };
