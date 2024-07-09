@@ -4,6 +4,12 @@ const socketIO = require("socket.io");
 const { joinRoom } = require("./create-room");
 const { ongoingGames } = require("../models/game.model");
 
+const axios = require("axios");
+
+const openTdb_url = axios.create({
+  baseURL: "https://opentdb.com",
+});
+
 exports.configureSockets = (server, ROOM_LIMIT = 4) => {
   const io = socketIO(server, {
     cors: {
@@ -39,6 +45,21 @@ exports.configureSockets = (server, ROOM_LIMIT = 4) => {
             console.log(`Avatars emitted to room: ${topic_id}`);
           }
         );
+
+        await openTdb_url
+          .get(
+            `/api.php?amount=10&category=${topic_id}&difficulty=medium&type=multiple`
+          )
+          .then(({ data }) => {
+            const questions = data.results.map((response) => {
+              const { question, correct_answer, incorrect_answers } = response;
+              return { question, correct_answer, incorrect_answers };
+            });
+            io.to(topic_id).emit("questionsFetched", questions);
+          })
+          .catch((err) => {
+            console.log("Error getting data from optentdb:", err);
+          });
       }
     });
     // socket.on("disconnect", disconnect);

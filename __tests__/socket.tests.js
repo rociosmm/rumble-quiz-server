@@ -229,5 +229,37 @@ describe("Creating and joining rooms", () => {
   });
 });
 
+describe.only("Game play", () => {
+  test("Requests questions for specified topic_id", async () => {
+    const topic_id = "13";
+    const examplePlayer = {
+      username: "ReadyPlayerOne",
+      avatar_url: "wwww.example.com/image.png",
+    };
+
+    clientSocket.on("questionsFetched", (questions) => {
+      console.log(questions);
+      questions.forEach((question) => {
+        expect(question).toMatchObject({
+          question: expect.any(String),
+          correct_answer: expect.any(String),
+          incorrect_answers: [
+            expect.any(String),
+            expect.any(String),
+            expect.any(String),
+          ],
+        });
+      });
+    });
+
+    await new Promise((resolve) => {
+      clientSocket.emit("topic-selected", topic_id, examplePlayer, () => {
+        resolve();
+      });
+    });
+
+    return waitFor(clientSocket, "questionsFetched");
+  });
+});
 
 //describe("Game end")
