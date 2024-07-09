@@ -57,21 +57,20 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
               return { question, correct_answer, incorrect_answers };
             });
 
-            io.to(topic_id).emit("question", questions[0]);
+            io.to(topic_id).emit("question", questions[0], () => {
+              console.log(`Question 1 sent to room ${topic_id}`);
+              console.log(questions[0]);
+            });
             io.on("answer", (answerData) => {
+              const game = ongoingGames[topic_id];
 
-              const game = ongoingGames[topic_id]
-
-              game.round_counter++
-              if(answerData.eliminated){
-
+              game.round_counter++;
+              if (answerData.eliminated) {
               }
-
-            })
-
+            });
           })
           .catch((err) => {
-            console.log("Error getting data from optentdb:", err);
+            console.log("Error getting data from optentdb!");
           });
       }
     });
