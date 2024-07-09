@@ -55,7 +55,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 4) => {
               const { question, correct_answer, incorrect_answers } = response;
               return { question, correct_answer, incorrect_answers };
             });
-            io.to(topic_id).emit("questionsFetched", questions);
+            io.to(topic_id).emit("question", questions[0]);
           })
           .catch((err) => {
             console.log("Error getting data from optentdb:", err);

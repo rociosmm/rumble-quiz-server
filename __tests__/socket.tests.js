@@ -237,18 +237,17 @@ describe.only("Game play", () => {
       avatar_url: "wwww.example.com/image.png",
     };
 
-    clientSocket.on("questionsFetched", (questions) => {
-      console.log(questions);
-      questions.forEach((question) => {
-        expect(question).toMatchObject({
-          question: expect.any(String),
-          correct_answer: expect.any(String),
-          incorrect_answers: [
-            expect.any(String),
-            expect.any(String),
-            expect.any(String),
-          ],
-        });
+    clientSocket.on("question", (question) => {
+      console.log(question);
+
+      expect(question).toMatchObject({
+        question: expect.any(String),
+        correct_answer: expect.any(String),
+        incorrect_answers: [
+          expect.any(String),
+          expect.any(String),
+          expect.any(String),
+        ],
       });
     });
 
@@ -258,7 +257,7 @@ describe.only("Game play", () => {
       });
     });
 
-    return waitFor(clientSocket, "questionsFetched");
+    return waitFor(clientSocket, "question");
   });
 });
 
