@@ -6,6 +6,7 @@ const { checkRoomExists, joinRoom } = require("../sockets/create-room");
 const {
   addPlayerToGame,
   createGameData,
+  updateGameData,
   ongoingGames,
 } = require("../models/game.model");
 const ioc = require("socket.io-client");
@@ -266,14 +267,27 @@ describe("Game play", () => {
       avatar_url: "wwww.example.com/image.png",
     };
 
-    clientSocket.on("question", (question) => {
-      const answersObject = {};
-      answersObject[examplePlayer.username] = {
+    clientSocket.on("question", async (question) => {
+      const answersObject = {
+        username: examplePlayer.username,
         eliminated: true,
         points: 7,
       };
+      clientSocket.emit("answerTest", answersObject);
+    });
 
-      clientSocket.emit("answer", answersObject);
+    serverSocket.on("answerTest", (answerData) => {
+      updateGameData(topic_id, answerData);
+      expect(ongoingGames[topic_id]).toMatchObject({
+        players_active: [],
+        players_eliminated: ["ReadyPlayerOne"],
+        round_counter: 2,
+        avatar_urls: {
+          ReadyPlayerOne:
+            "https://img.icons8.com/?size=100&id=63688&format=png&color=000000",
+        },
+        points: { ReadyPlayerOne: 7 },
+      });
     });
 
     await new Promise((resolve) => {
@@ -282,17 +296,7 @@ describe("Game play", () => {
       });
     });
 
-    expect(
-      ongoingGames[topic_id].toEqual({
-        players_active: [],
-        players_eliminated: ["ReadyPlayerOne"],
-        round_counter: 2,
-        avatar_urls: {
-          ReadyPlayerOne: "wwww.example.com/image.png",
-        },
-        points: { ReadyPlayerOne: 7 },
-      })
-    );
+    return waitFor(serverSocket, "answerTest");
   });
 });
 

@@ -2,7 +2,7 @@
 
 const socketIO = require("socket.io");
 const { joinRoom } = require("./create-room");
-const { ongoingGames } = require("../models/game.model");
+const { ongoingGames, updateGameData } = require("../models/game.model");
 
 const axios = require("axios");
 
@@ -61,12 +61,8 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
               console.log(`Question 1 sent to room ${topic_id}`);
               console.log(questions[0]);
             });
-            io.on("answer", (answerData) => {
-              const game = ongoingGames[topic_id];
-
-              game.round_counter++;
-              if (answerData.eliminated) {
-              }
+            socket.on("answer", (answerData) => {
+              updateGameData(topic_id, answerData);
             });
           })
           .catch((err) => {
