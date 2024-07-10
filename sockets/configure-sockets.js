@@ -58,7 +58,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
               return { question, correct_answer, incorrect_answers };
             });
 
-            while (ongoingGames[topic_id].players_active.length > 1) {
+            while (ongoingGames[topic_id].players_active.length >= 1) {
               const round = ongoingGames[topic_id].round_counter;
               io.to(topic_id).emit("question", questions[round], () => {
                 console.log(`Question ${round + 1} sent to room ${topic_id}`);
