@@ -55,8 +55,10 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
               return { question, correct_answer, incorrect_answers };
             });
 
+
             const sendNextQuestion = () => {
               const round = ongoingGames[topic_id].round_counter;
+              
               if (ongoingGames[topic_id].players_active.length > 1) {
                 io.to(topic_id).emit("question", questions[round], () => {
                   console.log(`Question ${round + 1} sent to room ${topic_id}`);
@@ -65,7 +67,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
               }
             };
 
-            if (ongoingGames[topic_id].round_counter === 1) sendNextQuestion();
+            if (ongoingGames[topic_id].round_counter === 0) sendNextQuestion();
 
             let answersReceived = 0;
 
