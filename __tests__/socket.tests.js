@@ -260,7 +260,7 @@ describe("Game play", () => {
 
     return waitFor(clientSocket, "question");
   });
-  test.only("ongoingGames data gets updated with round data", async () => {
+  test("ongoingGames data gets updated with round data", async () => {
     const topic_id = "15";
     const examplePlayer = {
       username: "ReadyPlayerOne",
@@ -283,8 +283,7 @@ describe("Game play", () => {
         players_eliminated: ["ReadyPlayerOne"],
         round_counter: 1,
         avatar_urls: {
-          ReadyPlayerOne:
-            "https://img.icons8.com/?size=100&id=63688&format=png&color=000000",
+          ReadyPlayerOne: "wwww.example.com/image.png",
         },
         points: { ReadyPlayerOne: 7 },
       });
@@ -298,6 +297,36 @@ describe("Game play", () => {
 
     return waitFor(serverSocket, "answerTest");
   });
+  test.only("If there are players still in the game, the server will emit another question to the client when all answers received", async () => {
+    const topic_id = "15";
+    const examplePlayer = {
+      username: "ReadyPlayerOne",
+      avatar_url: "wwww.example.com/image.png",
+    };
+
+    clientSocket.on("question", async (question) => {
+      const answersObject = {
+        username: examplePlayer.username,
+        eliminated: false,
+        points: 7,
+      };
+      clientSocket.emit("answer", answersObject, () => {
+        console.log("answer test")
+        expect(ongoingGames[topic_id].round_counter).toBe(2);
+        resolve();
+      });
+    });
+
+    await new Promise((resolve) => {
+      clientSocket.emit("topic-selected", topic_id, examplePlayer, () => {
+        resolve();
+      });
+    });
+    return waitFor(serverSocket, "answer");
+  });
+  test.todo(
+    "If the are no more players in the game, emit end of round conditions"
+  );
 });
 
 //describe("Game end")

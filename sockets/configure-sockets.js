@@ -19,6 +19,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
   });
 
   io.on("connection", async (socket) => {
+    console.log("Rooms open:", io.of("/").adapter.rooms);
     console.log(`${socket.id} connected to server`);
 
     socket.on("topic-selected", async (topic_id, player, callback) => {
@@ -73,7 +74,6 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
                   } in room ${topic_id}`
                 );
                 updateGameData(topic_id, answerData);
-                if (answerData.eliminated) socket.leave(`${topic_id}`);
                 answersReceived++;
               });
 
@@ -88,12 +88,13 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
             console.log("Error getting data from optentdb!");
           });
       }
-      socket.on("leave-game", () => {
-        const index = game.players_active.indexOf(answerData.username);
-        game.players_active.splice(index, 1);
-        game.players_eliminated.push(answerData.username);
-        socket.leave(topic_id);
-      });
+    });
+    socket.on("leave-game", (topic_id) => {
+      console.log(`${socket.id} has left their game`);
+      const index = game.players_active.indexOf(answerData.username);
+      game.players_active.splice(index, 1);
+      game.players_eliminated.push(answerData.username);
+      socket.leave(topic_id);
     });
     // socket.on("disconnect", disconnect);
   });
