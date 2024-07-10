@@ -22,7 +22,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
     socket.on("topic-selected", async (topic_id, player, callback) => {
       if (callback) callback();
 
-      console.log(`${socket.id} selected a topic`);
+      console.log(`${player.username} selected a topic`);
 
       await joinRoom(
         io,
@@ -55,10 +55,9 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
               return { question, correct_answer, incorrect_answers };
             });
 
-
             const sendNextQuestion = () => {
               const round = ongoingGames[topic_id].round_counter;
-              
+
               if (ongoingGames[topic_id].players_active.length > 1) {
                 io.to(topic_id).emit("question", questions[round], () => {
                   console.log(`Question ${round + 1} sent to room ${topic_id}`);
@@ -76,7 +75,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
               console.log(
                 `Answer ${
                   ongoingGames[topic_id].round_counter + 1
-                } received from user ${socket.id} in room ${topic_id}`
+                } received from user ${player.username} in room ${topic_id}`
               );
               updateGameData(topic_id, answerData);
               answersReceived++;
