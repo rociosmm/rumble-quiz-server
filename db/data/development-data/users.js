@@ -1,5 +1,14 @@
 module.exports = [
   {
+    username: "guest",
+    email: "guest@example.com",
+    password: "123",
+    avatar_id: 10,
+    is_child: false,
+    colour_theme_id: 1,
+    online: true,
+  },
+  {
     username: "SparkleUnicorn",
     email: "sparkleunicorn@example.com",
     password: "password123",

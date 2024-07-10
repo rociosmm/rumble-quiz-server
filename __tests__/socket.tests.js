@@ -6,6 +6,7 @@ const { checkRoomExists, joinRoom } = require("../sockets/create-room");
 const {
   addPlayerToGame,
   createGameData,
+  updateGameData,
   ongoingGames,
 } = require("../models/game.model");
 const ioc = require("socket.io-client");
@@ -111,7 +112,7 @@ describe("Creating and joining rooms", () => {
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: [],
       players_eliminated: [],
-      round_counter: 1,
+      round_counter: 0,
       avatar_urls: {},
       points: {},
     });
@@ -136,7 +137,7 @@ describe("Creating and joining rooms", () => {
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: ["SparkleUnicorn"],
       players_eliminated: [],
-      round_counter: 1,
+      round_counter: 0,
       avatar_urls: {
         SparkleUnicorn: "wwww.example.com/image.png",
       },
@@ -152,7 +153,7 @@ describe("Creating and joining rooms", () => {
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: [],
       players_eliminated: [],
-      round_counter: 1,
+      round_counter: 0,
       avatar_urls: {},
       points: {},
     });
@@ -170,7 +171,7 @@ describe("Creating and joining rooms", () => {
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: ["SparkleUnicorn"],
       players_eliminated: [],
-      round_counter: 1,
+      round_counter: 0,
       avatar_urls: {
         SparkleUnicorn: "wwww.example.com/image.png",
       },
@@ -195,7 +196,7 @@ describe("Creating and joining rooms", () => {
     expect(ongoingGames[topic_id]).toMatchObject({
       players_active: ["SparkleUnicorn"],
       players_eliminated: [],
-      round_counter: 1,
+      round_counter: 0,
       avatar_urls: {
         SparkleUnicorn: "wwww.example.com/image.png",
       },
@@ -229,7 +230,7 @@ describe("Creating and joining rooms", () => {
   });
 });
 
-describe.only("Game play", () => {
+describe("Game play", () => {
   test("Requests questions for specified topic_id", async () => {
     const topic_id = "13";
     const examplePlayer = {
@@ -237,18 +238,17 @@ describe.only("Game play", () => {
       avatar_url: "wwww.example.com/image.png",
     };
 
-    clientSocket.on("questionsFetched", (questions) => {
-      console.log(questions);
-      questions.forEach((question) => {
-        expect(question).toMatchObject({
-          question: expect.any(String),
-          correct_answer: expect.any(String),
-          incorrect_answers: [
-            expect.any(String),
-            expect.any(String),
-            expect.any(String),
-          ],
-        });
+    clientSocket.on("question", (question) => {
+      console.log(question);
+
+      expect(question).toMatchObject({
+        question: expect.any(String),
+        correct_answer: expect.any(String),
+        incorrect_answers: [
+          expect.any(String),
+          expect.any(String),
+          expect.any(String),
+        ],
       });
     });
 
@@ -258,8 +258,75 @@ describe.only("Game play", () => {
       });
     });
 
-    return waitFor(clientSocket, "questionsFetched");
+    return waitFor(clientSocket, "question");
   });
+  test.only("ongoingGames data gets updated with round data", async () => {
+    const topic_id = "15";
+    const examplePlayer = {
+      username: "ReadyPlayerOne",
+      avatar_url: "wwww.example.com/image.png",
+    };
+
+    clientSocket.on("question", async (question) => {
+      const answersObject = {
+        username: examplePlayer.username,
+        eliminated: true,
+        points: 7,
+      };
+      clientSocket.emit("answerTest", answersObject);
+    });
+
+    serverSocket.on("answerTest", (answerData) => {
+      updateGameData(topic_id, answerData);
+      expect(ongoingGames[topic_id]).toMatchObject({
+        players_active: [],
+        players_eliminated: ["ReadyPlayerOne"],
+        round_counter: 1,
+        avatar_urls: {
+          ReadyPlayerOne: "wwww.example.com/image.png",
+        },
+        points: { ReadyPlayerOne: 7 },
+      });
+    });
+
+    await new Promise((resolve) => {
+      clientSocket.emit("topic-selected", topic_id, examplePlayer, () => {
+        resolve();
+      });
+    });
+
+    return waitFor(serverSocket, "answerTest");
+  });
+  test("If there are players still in the game, the server will emit another question to the client when all answers received", async () => {
+    const topic_id = "15";
+    const examplePlayer = {
+      username: "ReadyPlayerOne",
+      avatar_url: "wwww.example.com/image.png",
+    };
+
+    clientSocket.on("question", async (question) => {
+      const answersObject = {
+        username: examplePlayer.username,
+        eliminated: false,
+        points: 7,
+      };
+      clientSocket.emit("answer", answersObject, () => {
+        console.log("answer test")
+        expect(ongoingGames[topic_id].round_counter).toBe(2);
+        resolve();
+      });
+    });
+
+    await new Promise((resolve) => {
+      clientSocket.emit("topic-selected", topic_id, examplePlayer, () => {
+        resolve();
+      });
+    });
+    return waitFor(serverSocket, "answer");
+  });
+  test.todo(
+    "If the are no more players in the game, emit end of round conditions"
+  );
 });
 
 //describe("Game end")
