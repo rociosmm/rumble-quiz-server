@@ -57,6 +57,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
                 correct_answer,
                 incorrect_answers,
                 avatars: ongoingGames[topic_id].avatar_urls,
+                remainingPlayers: ongoingGames[topic_id].players_active.length
               };
             });
 
@@ -66,7 +67,6 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
               if (ongoingGames[topic_id].players_active.length > 1) {
                 io.to(topic_id).emit("question", questions[round], () => {
                   console.log(`Question ${round + 1} sent to room ${topic_id}`);
-                  console.log(questions[round]);
                 });
               }
             };
