@@ -46,7 +46,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
 
         await openTdb_url
           .get(
-            `/api.php?amount=${ROOM_LIMIT}&category=${topic_id}&difficulty=medium&type=multiple`
+            `/api.php?amount=20&category=${topic_id}&difficulty=medium&type=multiple`
           )
           .then(({ data }) => {
             const topicName = data.results[0].category;
