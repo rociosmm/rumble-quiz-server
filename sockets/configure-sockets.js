@@ -52,7 +52,12 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
             const topicName = data.results[0].category;
             const questions = data.results.map((response) => {
               const { question, correct_answer, incorrect_answers } = response;
-              return { question, correct_answer, incorrect_answers };
+              return {
+                question,
+                correct_answer,
+                incorrect_answers,
+                avatars: ongoingGames[topic_id].avatar_urls,
+              };
             });
 
             const sendNextQuestion = () => {
