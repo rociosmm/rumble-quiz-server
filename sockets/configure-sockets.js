@@ -83,7 +83,9 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
               const remainingPlayersInGame =
                 ROOM_LIMIT - ongoingGames[topic_id].players_eliminated.length;
               if (answersReceived === remainingPlayersInGame) {
+                io.to(topic_id).emit("playersReady");
                 ongoingGames[topic_id].round_counter++;
+
                 sendNextQuestion();
               }
             });
