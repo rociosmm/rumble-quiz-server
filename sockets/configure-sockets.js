@@ -10,7 +10,7 @@ const openTdb_url = axios.create({
   baseURL: "https://opentdb.com",
 });
 
-exports.configureSockets = (server, ROOM_LIMIT = 1) => {
+exports.configureSockets = (server, ROOM_LIMIT = 3) => {
   const io = socketIO(server, {
     cors: {
       origin: "*",
@@ -57,27 +57,38 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
               return { question, correct_answer, incorrect_answers };
             });
 
-            // while (
-            //   ongoingGames[topic_id].round_counter <
-            //   ongoingGames[topic_id].players_active.length
-            // ) {
-            io.to(topic_id).emit("question", questions[0], () => {
-              console.log(`Question 1 sent to room ${topic_id}`);
-              console.log(questions[0]);
-            });
-            socket.on("answer", (answerData) => {
-              console.log(
-                `Answer received from user ${socket.id} in room ${topic_id}`
-              );
-              updateGameData(topic_id, answerData);
-            });
+            while (ongoingGames[topic_id].players_active.length > 1) {
+              const round = ongoingGames[topic_id].round_counter;
+              io.to(topic_id).emit("question", questions[round], () => {
+                console.log(`Question ${round + 1} sent to room ${topic_id}`);
+                console.log(questions[round]);
+              });
 
-            // }
+              let answersReceived = 0;
+
+              socket.on("answer", (answerData) => {
+                console.log(
+                  `Answer ${round + 1} received from user ${
+                    socket.id
+                  } in room ${topic_id}`
+                );
+                updateGameData(topic_id, answerData);
+                if (answerData.eliminated) socket.leave(`${topic_id}`);
+                answersReceived++;
+              });
+
+              const remainingPlayersInGame =
+                ROOM_LIMIT - ongoingGames[topic_id].players_eliminated.length;
+              if (answersReceived === remainingPlayersInGame) {
+                ongoingGames[topic_id].round_counter++;
+              }
+            }
           })
           .catch((err) => {
             console.log("Error getting data from optentdb!");
           });
       }
+   
     });
     // socket.on("disconnect", disconnect);
   });
