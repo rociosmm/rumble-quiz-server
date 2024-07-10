@@ -59,29 +59,30 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
             });
 
             // while (ongoingGames[topic_id].players_active.length >= 1) {
-              const round = ongoingGames[topic_id].round_counter;
-              io.to(topic_id).emit("question", questions[round], () => {
-                console.log(`Question ${round + 1} sent to room ${topic_id}`);
-                console.log(questions[round]);
-              });
+            const round = ongoingGames[topic_id].round_counter;
+            io.to(topic_id).emit("question", questions[round], () => {
+              console.log(`Question ${round + 1} sent to room ${topic_id}`);
+              console.log(questions[round]);
+            });
 
-              let answersReceived = 0;
+            let answersReceived = 0;
 
-              socket.on("answer", (answerData) => {
-                console.log(
-                  `Answer ${round + 1} received from user ${
-                    socket.id
-                  } in room ${topic_id}`
-                );
-                updateGameData(topic_id, answerData);
-                answersReceived++;
-              });
+            socket.on("answer", (answerData) => {
+              console.log(answerData);
+              console.log(
+                `Answer ${round + 1} received from user ${
+                  socket.id
+                } in room ${topic_id}`
+              );
+              updateGameData(topic_id, answerData);
+              answersReceived++;
+            });
 
-              const remainingPlayersInGame =
-                ROOM_LIMIT - ongoingGames[topic_id].players_eliminated.length;
-              if (answersReceived === remainingPlayersInGame) {
-                ongoingGames[topic_id].round_counter++;
-              }
+            const remainingPlayersInGame =
+              ROOM_LIMIT - ongoingGames[topic_id].players_eliminated.length;
+            if (answersReceived === remainingPlayersInGame) {
+              ongoingGames[topic_id].round_counter++;
+            }
             // }
           })
           .catch((err) => {
