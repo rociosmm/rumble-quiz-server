@@ -7,7 +7,7 @@ const openTdb_url = axios.create({
   baseURL: "https://opentdb.com",
 });
 
-exports.configureSockets = (server, ROOM_LIMIT = 3) => {
+exports.configureSockets = (server, ROOM_LIMIT = 1) => {
   const io = socketIO(server, {
     cors: {
       origin: "*",
@@ -95,11 +95,11 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
     });
 
     socket.on("leave-game", (topic_id) => {
-      console.log(`${socket.id} has left their game`);
       const index = game.players_active.indexOf(answerData.username);
       game.players_active.splice(index, 1);
       game.players_eliminated.push(answerData.username);
       socket.leave(topic_id);
+      console.log(`${socket.id} has left their game`);
     });
 
     // socket.on("disconnect", disconnect);
