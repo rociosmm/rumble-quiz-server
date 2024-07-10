@@ -88,7 +88,12 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
             console.log("Error getting data from optentdb!");
           });
       }
-   
+      socket.on("leave-game", () => {
+        const index = game.players_active.indexOf(answerData.username);
+        game.players_active.splice(index, 1);
+        game.players_eliminated.push(answerData.username);
+        socket.leave(topic_id);
+      });
     });
     // socket.on("disconnect", disconnect);
   });
