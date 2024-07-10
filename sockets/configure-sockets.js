@@ -1,16 +1,13 @@
-//https://github.com/BurakPetro/nc_group_project_ok_game/blob/main/server/src/sockets/socketManger.js
-
 const socketIO = require("socket.io");
 const { joinRoom } = require("./create-room");
 const { ongoingGames, updateGameData } = require("../models/game.model");
-
 const axios = require("axios");
 
 const openTdb_url = axios.create({
   baseURL: "https://opentdb.com",
 });
 
-exports.configureSockets = (server, ROOM_LIMIT = 1) => {
+exports.configureSockets = (server, ROOM_LIMIT = 3) => {
   const io = socketIO(server, {
     cors: {
       origin: "*",
@@ -58,38 +55,44 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
               return { question, correct_answer, incorrect_answers };
             });
 
-            // while (ongoingGames[topic_id].players_active.length >= 1) {
-            const round = ongoingGames[topic_id].round_counter;
-            io.to(topic_id).emit("question", questions[round], () => {
-              console.log(`Question ${round + 1} sent to room ${topic_id}`);
-              console.log(questions[round]);
-            });
+            const sendNextQuestion = () => {
+              const round = ongoingGames[topic_id].round_counter;
+              if (ongoingGames[topic_id].players_active.length > 1) {
+                io.to(topic_id).emit("question", questions[round], () => {
+                  console.log(`Question ${round + 1} sent to room ${topic_id}`);
+                  console.log(questions[round]);
+                });
+              }
+            };
+
+            if (ongoingGames[topic_id].round_counter === 1) sendNextQuestion();
 
             let answersReceived = 0;
 
             socket.on("answer", (answerData) => {
               console.log(answerData);
               console.log(
-                `Answer ${round + 1} received from user ${
-                  socket.id
-                } in room ${topic_id}`
+                `Answer ${
+                  ongoingGames[topic_id].round_counter + 1
+                } received from user ${socket.id} in room ${topic_id}`
               );
               updateGameData(topic_id, answerData);
               answersReceived++;
-            });
 
-            const remainingPlayersInGame =
-              ROOM_LIMIT - ongoingGames[topic_id].players_eliminated.length;
-            if (answersReceived === remainingPlayersInGame) {
-              ongoingGames[topic_id].round_counter++;
-            }
-            // }
+              const remainingPlayersInGame =
+                ROOM_LIMIT - ongoingGames[topic_id].players_eliminated.length;
+              if (answersReceived === remainingPlayersInGame) {
+                ongoingGames[topic_id].round_counter++;
+                sendNextQuestion();
+              }
+            });
           })
           .catch((err) => {
-            console.log("Error getting data from optentdb!");
+            console.log("Error getting data from opentdb!");
           });
       }
     });
+
     // socket.on("leave-game", (topic_id) => {
     //   console.log(`${socket.id} has left their game`);
     //   const index = game.players_active.indexOf(answerData.username);
@@ -97,6 +100,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
     //   game.players_eliminated.push(answerData.username);
     //   socket.leave(topic_id);
     // });
+
     // socket.on("disconnect", disconnect);
   });
 

@@ -260,7 +260,7 @@ describe("Game play", () => {
 
     return waitFor(clientSocket, "question");
   });
-  test("ongoingGames data gets updated with round data", async () => {
+  test.only("ongoingGames data gets updated with round data", async () => {
     const topic_id = "15";
     const examplePlayer = {
       username: "ReadyPlayerOne",
@@ -297,7 +297,7 @@ describe("Game play", () => {
 
     return waitFor(serverSocket, "answerTest");
   });
-  test.only("If there are players still in the game, the server will emit another question to the client when all answers received", async () => {
+  test("If there are players still in the game, the server will emit another question to the client when all answers received", async () => {
     const topic_id = "15";
     const examplePlayer = {
       username: "ReadyPlayerOne",
