@@ -105,7 +105,13 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
       const index = game.players_active.indexOf(answerData.username);
       game.players_active.splice(index, 1);
       game.players_eliminated.push(answerData.username);
-      socket.leave(topic_id);
+
+      socket.rooms.forEach((room) => {
+        if (room !== socket.id) {
+          socket.leave(room);
+        }
+      });
+
       console.log(`${socket.id} has left their game`);
     });
 
