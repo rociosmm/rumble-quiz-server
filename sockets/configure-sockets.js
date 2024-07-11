@@ -103,11 +103,15 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
 
     socket.on("leave-game", () => {
       console.log(`${socket.id} has left their game`);
-      ongoingGames.forEach((game, index) => {
-        const playerIndex = game.players_active.indexOf(answerData.username);
-        ongoingGames[index].players_active.splice(playerIndex, 1);
-        ongoingGames[index].players_eliminated.push(answerData.username);
-      });
+
+      for (let i = 0; i < Object.keys(ongoingGames).length; i++) {
+        const key = Object.keys(ongoingGames)[i]
+        const playerIndex = ongoingGames[key].players_active.indexOf(
+          answerData.username
+        );
+        ongoingGames[key].players_active.splice(playerIndex, 1);
+        ongoingGames[key].players_eliminated.push(answerData.username);
+      }
 
       socket.rooms.forEach((room) => {
         if (room !== socket.id) {
