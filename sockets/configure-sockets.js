@@ -101,7 +101,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
       }
     });
 
-    socket.on("leave-game", (topic_id) => {
+    socket.on("leave-game", () => {
       const index = game.players_active.indexOf(answerData.username);
       game.players_active.splice(index, 1);
       game.players_eliminated.push(answerData.username);
