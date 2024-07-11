@@ -101,14 +101,12 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
       }
     });
 
-    socket.on("leave-game", () => {
+    socket.on("leave-game", (username) => {
       console.log(`${socket.id} has left their game`);
 
       for (let i = 0; i < Object.keys(ongoingGames).length; i++) {
-        const key = Object.keys(ongoingGames)[i]
-        const playerIndex = ongoingGames[key].players_active.indexOf(
-          answerData.username
-        );
+        const key = Object.keys(ongoingGames)[i];
+        const playerIndex = ongoingGames[key].players_active.indexOf(username);
         ongoingGames[key].players_active.splice(playerIndex, 1);
         ongoingGames[key].players_eliminated.push(answerData.username);
       }
