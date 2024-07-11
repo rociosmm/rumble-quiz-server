@@ -1,5 +1,5 @@
 const ongoingGames = {};
-
+const axios = {}
 const createGameData = (topic_id) => {
   ongoingGames[topic_id] = {
     players_active: [],
@@ -31,9 +31,15 @@ const updateGameData = (topic_id, answerData) => {
   game.points[answerData.username] += answerData.points;
 };
 
+const logGameData = (topic_id) => {
+  const game = ongoingGames[topic_id];
+
+};
+
 module.exports = {
   addPlayerToGame,
   ongoingGames,
   createGameData,
   updateGameData,
+  logGameData,
 };

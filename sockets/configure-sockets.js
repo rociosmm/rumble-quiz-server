@@ -64,7 +64,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
             const sendNextQuestion = () => {
               const round = ongoingGames[topic_id].round_counter;
 
-              if (ongoingGames[topic_id].players_active.length > 1) {
+              if (ongoingGames[topic_id].players_active.length >= 1) {
                 io.to(topic_id).emit("question", questions[round], () => {
                   console.log(`Question ${round + 1} sent to room ${topic_id}`);
                 });
@@ -102,7 +102,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
     });
 
     socket.on("leave-game", () => {
-      console.log(`${socket.id} has left their game`)
+      console.log(`${socket.id} has left their game`);
       const index = game.players_active.indexOf(answerData.username);
       game.players_active.splice(index, 1);
       game.players_eliminated.push(answerData.username);
