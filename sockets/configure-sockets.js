@@ -108,7 +108,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
         const key = Object.keys(ongoingGames)[i];
         const playerIndex = ongoingGames[key].players_active.indexOf(username);
         ongoingGames[key].players_active.splice(playerIndex, 1);
-        ongoingGames[key].players_eliminated.push(answerData.username);
+        ongoingGames[key].players_eliminated.push(username);
       }
 
       socket.rooms.forEach((room) => {
