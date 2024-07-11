@@ -92,7 +92,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
                 ongoingGames[topic_id].round_counter++;
 
                 sendNextQuestion();
-              }, 20000);
+              }, 10000);
             });
           })
           .catch((err) => {
