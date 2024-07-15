@@ -74,8 +74,8 @@ exports.configureSockets = (server, ROOM_LIMIT = 2) => {
             const sendNextQuestion = async () => {
               const round = ongoingGames[topic_id].round_counter;
 
-              questions[round].avatars = ongoingGames[topic_id].avatar_urls;
-              questions[round].remainingPlayers =
+              questions[round]["avatars"] = ongoingGames[topic_id].avatar_urls;
+              questions[round]["remainingPlayers"] =
                 ongoingGames[topic_id].players_active.length;
 
               if (ongoingGames[topic_id].players_active.length > 1) {
