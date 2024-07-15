@@ -23,6 +23,7 @@ const joinRoom = async (
     //when there are already x people inside the room.
     await socket.emit("avatars", "room-full");
   }
+  socket.leave(`${socket.id}`)
   addPlayerToGame(username, avatarUrl, topic_id);
 };
 
