@@ -61,7 +61,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
               };
             });
 
-            const sendNextQuestion = () => {
+            const sendNextQuestion = async () => {
               const round = ongoingGames[topic_id].round_counter;
 
               if (ongoingGames[topic_id].players_active.length > 1) {
@@ -70,6 +70,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
                 });
               } else {
                 io.to(topic_id).emit("end-of-game");
+                await logGameData(topic_id);
               }
             };
 
