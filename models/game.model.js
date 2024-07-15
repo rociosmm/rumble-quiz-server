@@ -40,9 +40,8 @@ const logGameData = async (topic_id, topic_name) => {
     baseURL: "https://rumble-quiz-server.onrender.com/api",
   });
 
-  await players_active.forEach(player, () => {
+  await game.players_active.forEach(player, () => {
     const postDat = {
-      game_id: game_id,
       player_username: player.username,
       won_game: true,
       points: game.points[player.username],
@@ -51,7 +50,7 @@ const logGameData = async (topic_id, topic_name) => {
     baseURL.post("/logs", postDat);
   });
 
-  await players_eliminated.forEach(player, () => {
+  await game.players_eliminated.forEach(player, () => {
     const postDat = {
       game_id: game_id,
       player_username: player.username,
