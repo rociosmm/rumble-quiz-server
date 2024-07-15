@@ -1,8 +1,8 @@
 const decodeHTMLEntities = (str) => {
   const entities = {
     "&amp;": "&",
-    "&quot;": '"',
-    "&#39;": "'",
+    '\"': "",
+    "&#039;": "'",
   };
 
   return str.replace(
