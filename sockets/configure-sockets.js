@@ -5,6 +5,7 @@ const {
   updateGameData,
   logGameData,
 } = require("../models/game.model");
+const decodeHTMLEntities = require("../utils/decode-html-entities");
 const axios = require("axios");
 
 const openTdb_url = axios.create({
@@ -55,7 +56,14 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
           .then(({ data }) => {
             const topicName = data.results[0].category;
             const questions = data.results.map((response) => {
-              const { question, correct_answer, incorrect_answers } = response;
+              const question = decodeHTMLEntities(response.question);
+              const correct_answer = decodeHTMLEntities(
+                response.correct_answer
+              );
+              const incorrect_answers = response.incorrect_answers.map(
+                (answer) => decodeHTMLEntities(answer)
+              );
+
               return {
                 question,
                 correct_answer,
