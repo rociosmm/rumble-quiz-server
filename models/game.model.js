@@ -40,26 +40,37 @@ const logGameData = async (topic_id, topic_name) => {
     baseURL: "https://rumble-quiz-server.onrender.com/api",
   });
 
-  await game.players_active.forEach((player) => {
-    const postDat = {
-      player_username: player.username,
-      won_game: true,
-      points: game.points[player.username],
-      topic_name: topic_name,
-    };
-    baseURL.post("/logs", postDat);
+  Promise.all([
+    game.players_active.forEach(async (player) => {
+      const postDat = {
+        player_username: player.username,
+        won_game: true,
+        points: game.points[player.username],
+        topic_name: topic_name,
+      };
+      console.log("Winner added to Log:", postDat);
+
+      await baseURL.post("/logs", postDat);
+    }),
+  ]).catch((err) => {
+    console.log("Error posting log:", err);
   });
 
-  await game.players_eliminated.forEach((player) => {
-    const postDat = {
-      game_id: game_id,
-      player_username: player.username,
-      won_game: false,
-      points: game.points[player.username],
-      topic_name: topic_name,
-    };
-    console.log(postDat);
-    baseURL.post("/logs", postDat);
+  Promise.all([
+    game.players_eliminated.forEach(async (player) => {
+      const postDat = {
+        game_id: game_id,
+        player_username: player.username,
+        won_game: false,
+        points: game.points[player.username],
+        topic_name: topic_name,
+      };
+      console.log("Loser added to Log:", postDat);
+
+      await baseURL.post("/logs", postDat);
+    }),
+  ]).catch((err) => {
+    console.log("Error posting log:", err);
   });
 };
 
