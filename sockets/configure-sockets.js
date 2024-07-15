@@ -1,6 +1,10 @@
 const socketIO = require("socket.io");
 const { joinRoom } = require("./create-room");
-const { ongoingGames, updateGameData } = require("../models/game.model");
+const {
+  ongoingGames,
+  updateGameData,
+  logGameData,
+} = require("../models/game.model");
 const axios = require("axios");
 
 const openTdb_url = axios.create({
