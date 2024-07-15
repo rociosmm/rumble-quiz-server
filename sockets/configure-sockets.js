@@ -1,6 +1,10 @@
 const socketIO = require("socket.io");
 const { joinRoom } = require("./create-room");
-const { ongoingGames, updateGameData } = require("../models/game.model");
+const {
+  ongoingGames,
+  updateGameData,
+  logGameData,
+} = require("../models/game.model");
 const axios = require("axios");
 
 const openTdb_url = axios.create({
@@ -61,7 +65,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
               };
             });
 
-            const sendNextQuestion = () => {
+            const sendNextQuestion = async () => {
               const round = ongoingGames[topic_id].round_counter;
 
               if (ongoingGames[topic_id].players_active.length > 1) {
@@ -69,7 +73,9 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
                   console.log(`Question ${round + 1} sent to room ${topic_id}`);
                 });
               } else {
+                console.log(`${topic_id}: game ended`);
                 io.to(topic_id).emit("end-of-game");
+                await logGameData(topic_id, topicName);
               }
             };
 
@@ -92,7 +98,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
                 ongoingGames[topic_id].round_counter++;
 
                 sendNextQuestion();
-              }, 20000);
+              }, 10000);
             });
           })
           .catch((err) => {

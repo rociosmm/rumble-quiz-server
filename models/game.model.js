@@ -1,5 +1,6 @@
 const ongoingGames = {};
-const axios = {}
+const { v4: uuidv4 } = require("uuid");
+const axios = require("axios");
 const createGameData = (topic_id) => {
   ongoingGames[topic_id] = {
     players_active: [],
@@ -31,9 +32,40 @@ const updateGameData = (topic_id, answerData) => {
   game.points[answerData.username] += answerData.points;
 };
 
-const logGameData = (topic_id) => {
+const logGameData = async (topic_id, topic_name) => {
   const game = ongoingGames[topic_id];
+  const game_id = topic_id + uuidv4();
 
+  const baseURL = axios.create({
+    baseURL: "https://rumble-quiz-server.onrender.com/api",
+  });
+
+  const postDat = [];
+
+  game.players_active.forEach(async (player) => {
+    postDat.push({
+      game_id: game_id,
+      player_username: player,
+      won_game: true,
+      points: game.points[player],
+      topic_name: topic_name,
+    });
+  });
+
+  game.players_eliminated.forEach(async (player) => {
+    postDat.push({
+      game_id: game_id,
+      player_username: player,
+      won_game: true,
+      points: game.points[player],
+      topic_name: topic_name,
+    });
+  });
+
+  await baseURL.post("/logs", postDat).catch((err) => {
+    console.log("Error posting log:", err);
+  });
+  console.log("Game log added:", postDat);
 };
 
 module.exports = {
