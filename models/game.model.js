@@ -1,6 +1,6 @@
 const ongoingGames = {};
 const { v4: uuidv4 } = require("uuid");
-const axios = require(axios);
+const axios = require("axios");
 const createGameData = (topic_id) => {
   ongoingGames[topic_id] = {
     players_active: [],
