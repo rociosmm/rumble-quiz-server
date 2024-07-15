@@ -58,6 +58,7 @@ const logGameData = async (topic_id, topic_name) => {
       points: game.points[player.username],
       topic_name: topic_name,
     };
+    console.log(postDat);
     baseURL.post("/logs", postDat);
   });
 };

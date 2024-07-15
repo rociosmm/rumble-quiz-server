@@ -67,6 +67,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
 
             const sendNextQuestion = async () => {
               const round = ongoingGames[topic_id].round_counter;
+              console.log(ongoingGames);
 
               if (ongoingGames[topic_id].players_active.length >= 1) {
                 io.to(topic_id).emit("question", questions[round], () => {
