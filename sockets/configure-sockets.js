@@ -67,13 +67,14 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
               return {
                 question,
                 correct_answer,
-                incorrect_answers,
-                avatars: ongoingGames[topic_id].avatar_urls,
-                remainingPlayers: ongoingGames[topic_id].players_active.length,
+                incorrect_answers
               };
             });
 
             const sendNextQuestion = async () => {
+              questions[round].avatars = ongoingGames[topic_id].avatar_urls
+              questions[round].remainingPlayers = ongoingGames[topic_id].players_active.length
+
               const round = ongoingGames[topic_id].round_counter;
 
               if (ongoingGames[topic_id].players_active.length > 1) {
