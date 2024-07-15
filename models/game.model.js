@@ -43,9 +43,9 @@ const logGameData = async (topic_id, topic_name) => {
   Promise.all([
     game.players_active.map(async (player) => {
       const postDat = {
-        player_username: player.username,
+        player_username: player,
         won_game: true,
-        points: game.points[player.username],
+        points: game.points[player],
         topic_name: topic_name,
       };
       console.log("Winner added to Log:", postDat);
@@ -60,9 +60,9 @@ const logGameData = async (topic_id, topic_name) => {
     game.players_eliminated.map(async (player) => {
       const postDat = {
         game_id: game_id,
-        player_username: player.username,
+        player_username: player,
         won_game: false,
-        points: game.points[player.username],
+        points: game.points[player],
         topic_name: topic_name,
       };
       console.log("Loser added to Log:", postDat);
