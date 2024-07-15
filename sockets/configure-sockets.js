@@ -12,7 +12,7 @@ const openTdb_url = axios.create({
   baseURL: "https://opentdb.com",
 });
 
-exports.configureSockets = (server, ROOM_LIMIT = 3) => {
+exports.configureSockets = (server, ROOM_LIMIT = 2) => {
   const io = socketIO(server, {
     cors: {
       origin: "*",
@@ -67,16 +67,16 @@ exports.configureSockets = (server, ROOM_LIMIT = 3) => {
               return {
                 question,
                 correct_answer,
-                incorrect_answers
+                incorrect_answers,
               };
             });
 
             const sendNextQuestion = async () => {
               const round = ongoingGames[topic_id].round_counter;
-              
-              questions[round].avatars = ongoingGames[topic_id].avatar_urls
-              questions[round].remainingPlayers = ongoingGames[topic_id].players_active.length
 
+              questions[round].avatars = ongoingGames[topic_id].avatar_urls;
+              questions[round].remainingPlayers =
+                ongoingGames[topic_id].players_active.length;
 
               if (ongoingGames[topic_id].players_active.length > 1) {
                 io.to(topic_id).emit("question", questions[round], () => {
