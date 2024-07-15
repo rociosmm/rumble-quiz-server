@@ -44,6 +44,7 @@ const logGameData = async (topic_id, topic_name) => {
 
   game.players_active.forEach(async (player) => {
     postDat.push({
+      game_id: game_id,
       player_username: player,
       won_game: true,
       points: game.points[player],
@@ -53,6 +54,7 @@ const logGameData = async (topic_id, topic_name) => {
 
   game.players_eliminated.forEach(async (player) => {
     postDat.push({
+      game_id: game_id,
       player_username: player,
       won_game: true,
       points: game.points[player],
