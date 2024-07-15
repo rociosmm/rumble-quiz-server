@@ -74,7 +74,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 1) => {
                 });
               } else {
                 io.to(topic_id).emit("end-of-game");
-                await logGameData(topic_id);
+                await logGameData(topic_id, topicName);
               }
             };
 
