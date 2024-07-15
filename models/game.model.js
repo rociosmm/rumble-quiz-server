@@ -41,7 +41,7 @@ const logGameData = async (topic_id, topic_name) => {
   });
 
   Promise.all([
-    game.players_active.forEach(async (player) => {
+    game.players_active.map(async (player) => {
       const postDat = {
         player_username: player.username,
         won_game: true,
@@ -57,7 +57,7 @@ const logGameData = async (topic_id, topic_name) => {
   });
 
   Promise.all([
-    game.players_eliminated.forEach(async (player) => {
+    game.players_eliminated.map(async (player) => {
       const postDat = {
         game_id: game_id,
         player_username: player.username,
