@@ -126,14 +126,15 @@ exports.configureSockets = (server, ROOM_LIMIT = 2) => {
         ongoingGames[key].players_active.splice(playerIndex, 1);
         ongoingGames[key].players_eliminated.push(username);
       }
-
+      console.log(`${socket.id} rooms:`, socket.rooms);
       socket.rooms.forEach((room) => {
         if (room !== socket.id) {
           socket.leave(room);
         }
       });
 
-      console.log(`${socket.id} has left their game`);
+      console.log(`${socket.id} has left `);
+      console.log("Rooms open:", io.of("/").adapter.rooms);
     });
 
     // socket.on("disconnect", disconnect);
