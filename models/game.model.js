@@ -1,5 +1,4 @@
 const ongoingGames = {};
-const { default: axios } = require("axios");
 const { v4: uuidv4 } = require("uuid");
 const axios = require(axios);
 const createGameData = (topic_id) => {
