@@ -237,5 +237,47 @@
         "avatar_url": "https://github.com/nkytruong/rumble-quiz-app/blob/main/assets/avatars/icons8-bear-48.png"
       }
     }
+  },
+  "GET /api/notifications/:username": {
+    "description": "serves an array with the notifications for specific user",
+    "example_response": [
+      {
+        "notification_id": 1,
+        "notification_text": "hello",
+        "time": "2024-08-05T19:57:42.488Z",
+        "seen": true,
+        "user_id": 1,
+        "sender_id": 2
+      },
+      {
+        "notification_id": 3,
+        "notification_text": "hello",
+        "time": "2024-08-05T19:57:42.488Z",
+        "seen": false,
+        "user_id": 1,
+        "sender_id": 2
+      },
+      {
+        "notification_id": 4,
+        "notification_text": "hello",
+        "time": "2024-08-05T19:57:42.488Z",
+        "seen": true,
+        "user_id": 1,
+        "sender_id": 2
+      }
+    ]
+  },
+  "PATCH /api/notifications/:notification_id": {
+    "description": "patches an existing notification to change its seen status to true. It returns the modified notification",
+    "example_response": [
+      {
+        "notification_id": 1,
+        "notification_text": "hello",
+        "time": "2024-08-05T19:57:42.488Z",
+        "seen": true,
+        "user_id": 1,
+        "sender_id": 2
+      }
+    ]
   }
 }
