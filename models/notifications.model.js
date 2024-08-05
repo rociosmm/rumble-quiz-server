@@ -11,3 +11,13 @@ exports.fetchNotifByUser = (username) => {
     return rows;
   });
 };
+
+exports.patchNotif = (id) => {
+  const queryString = `UPDATE notifications SET seen = true WHERE notification_id = $1 RETURNING *`;
+  return db.query(queryString, [id]).then(({ rows }) => {
+    if (!rows.length) {
+      return Promise.reject({ status: 404, msg: "Not found" });
+    }
+    return rows[0];
+  });
+};
