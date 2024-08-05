@@ -10,6 +10,7 @@ const {
   avatarsRouter,
   soundRouter,
   logsRouter,
+  notificationsRouter,
 } = require("./routes/index.js");
 
 const app = express();
@@ -31,6 +32,8 @@ app.use("/api/avatars", avatarsRouter);
 app.use("/api/sounds", soundRouter);
 
 app.use("/api/logs", logsRouter);
+
+app.use("/api/notifications", notificationsRouter);
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
