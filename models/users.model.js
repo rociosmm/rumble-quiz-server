@@ -3,15 +3,18 @@ const bcrypt = require("bcrypt");
 const { checkIfExists } = require("./users.utils");
 const jwt = require("jwt-simple");
 
-exports.fetchOnlineUsers = () => {
-  return db
-    .query(
-      `SELECT user_id, username, email, avatar_id, is_child, colour_theme_id, online FROM users
-    WHERE online = true;`
-    )
-    .then(({ rows }) => {
-      return rows;
-    });
+exports.fetchAllUsers = (online) => {
+  let queryStr = `SELECT user_id, username, email, avatar_id, is_child, colour_theme_id, online FROM users`;
+
+  const arrToQueryString = [];
+  if (online !== undefined) {
+    queryStr += ` WHERE online = $1`;
+    arrToQueryString.push(online);
+  }
+
+  return db.query(queryStr, arrToQueryString).then(({ rows }) => {
+    return rows;
+  });
 };
 
 exports.fetchUser = (userRequested) => {

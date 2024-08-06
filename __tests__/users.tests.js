@@ -225,15 +225,16 @@ describe("/api/users/:username/logs", () => {
   });
 });
 
-describe("/api/users/", () => {
-  test("GET: 200 responds with all online users", () => {
+describe("/api/users", () => {
+  test("GET: 200 responds with all users", () => {
     return request(app)
       .get("/api/users")
       .expect(200)
       .then(({ body }) => {
-        expect(body.users.length).toBe(1);
+        const { users } = body;
+        expect(users.length).toBeGreaterThan(1)
 
-        body.users.forEach((user) => {
+        users.forEach((user) => {
           expect(user).toMatchObject({
             user_id: expect.any(Number),
             username: expect.any(String),
@@ -241,6 +242,21 @@ describe("/api/users/", () => {
             avatar_id: expect.any(Number),
             is_child: expect.any(Boolean),
             colour_theme_id: expect.any(Number),
+            online: expect.any(Boolean),
+          });
+        });
+      });
+  });
+  test("GET: 200 responds with all online users", () => {
+    return request(app)
+      .get("/api/users?online=true")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users.length).toBe(1);
+
+        users.forEach((user) => {
+          expect(user).toMatchObject({
             online: true,
           });
         });
