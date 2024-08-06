@@ -18,9 +18,9 @@ exports.getOnlineUsers = (req, res, next) => {
 };
 
 exports.getUser = (req, res, next) => {
-  const { username } = req.params;
+  const { userRequested } = req.params;
 
-  fetchUser(username)
+  fetchUser(userRequested)
     .then((user) => {
       res.status(200).send({ user });
     })

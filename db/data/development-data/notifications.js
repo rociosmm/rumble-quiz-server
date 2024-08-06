@@ -111,7 +111,7 @@ module.exports = [
     notification_text: "New comment on your post.",
     seen: false,
     user_id: 16,
-    sender_id: 17,
+    sender_id: 15,
   },
   {
     notification_text: "You have a new follower.",

@@ -14,7 +14,8 @@ usersRouter.route("/").get(getOnlineUsers).post(postNewUser);
 
 usersRouter.route("/login").post(postLogin);
 
-usersRouter.route("/:username").get(getUser).patch(patchUser);
+usersRouter.route("/:userRequested").get(getUser);
+usersRouter.route("/:username").patch(patchUser);
 
 usersRouter.route("/:username/friends").get(getFriends).post(postFriendship);
 usersRouter.route("/:username/logs").get(getLogByUser);
