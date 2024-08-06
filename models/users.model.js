@@ -15,7 +15,8 @@ exports.fetchOnlineUsers = () => {
 };
 
 exports.fetchUser = (userRequested) => {
-  let queryStr = `SELECT user_id, username, email, avatar_id, is_child, colour_theme_id, online FROM users`;
+  let queryStr = `SELECT users.user_id, users.username, users.email, users.is_child, users.colour_theme_id, users.online, avatars.* FROM users 
+  LEFT JOIN avatars ON users.avatar_id = avatars.avatar_id`;
 
   if (!isNaN(userRequested)) {
     queryStr += ` WHERE user_id = $1;`;
