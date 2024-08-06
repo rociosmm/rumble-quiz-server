@@ -4,11 +4,12 @@ const { checkIfExists } = require("./users.utils");
 const jwt = require("jwt-simple");
 
 exports.fetchAllUsers = (online) => {
-  let queryStr = `SELECT user_id, username, email, avatar_id, is_child, colour_theme_id, online FROM users`;
+  let queryStr = `SELECT users.user_id, users.username, users.email, users.avatar_id, users.is_child, users.colour_theme_id, users.online, avatars.avatar_url FROM users
+  LEFT JOIN avatars ON users.avatar_id = avatars.avatar_id`;
 
   const arrToQueryString = [];
   if (online !== undefined) {
-    queryStr += ` WHERE online = $1`;
+    queryStr += ` WHERE users.online = $1`;
     arrToQueryString.push(online);
   }
 
