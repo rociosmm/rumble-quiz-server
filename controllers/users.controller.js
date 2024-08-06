@@ -1,7 +1,7 @@
 const { friendship } = require("../db/data/test-data");
 const {
   fetchUser,
-  fetchOnlineUsers,
+  fetchAllUsers,
   createUser,
   modifyUser,
   fetchFriends,
@@ -11,8 +11,9 @@ const {
 } = require("../models/users.model");
 const { checkIfExists } = require("../models/users.utils");
 
-exports.getOnlineUsers = (req, res, next) => {
-  fetchOnlineUsers().then((users) => {
+exports.getAllUsers = (req, res, next) => {
+  const { online } = req.query;
+  fetchAllUsers(online).then((users) => {
     res.status(200).send({ users });
   });
 };

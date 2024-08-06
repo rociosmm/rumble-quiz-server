@@ -1,16 +1,16 @@
 const {
   getUser,
-  getOnlineUsers,
+  getAllUsers,
   postNewUser,
   patchUser,
   getFriends,
   postFriendship,
   getLogByUser,
-  postLogin
+  postLogin,
 } = require("../controllers/users.controller");
 const usersRouter = require("express").Router();
 
-usersRouter.route("/").get(getOnlineUsers).post(postNewUser);
+usersRouter.route("/").get(getAllUsers).post(postNewUser);
 
 usersRouter.route("/login").post(postLogin);
 
