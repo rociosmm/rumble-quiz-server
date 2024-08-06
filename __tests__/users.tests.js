@@ -39,6 +39,8 @@ describe("/api/users/:userRequested", () => {
           is_child: expect.any(Boolean),
           colour_theme_id: expect.any(Number),
           online: expect.any(Boolean),
+          avatar_name: expect.any(String),
+          avatar_url: expect.any(String),
         });
       });
   });
