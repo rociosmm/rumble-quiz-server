@@ -7,6 +7,7 @@
   },
   "GET /api/users": {
     "description": "serves all the ONLINE users",
+    "queries": ["online"],
     "example_response": [
       {
         "users": [
