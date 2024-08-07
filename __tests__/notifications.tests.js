@@ -67,3 +67,38 @@ describe("/api/notifications/:notification_id", () => {
       });
   });
 });
+
+describe("/api/notifications", () => {
+  test("POST: 201 responds with the new notification", () => {
+    const newNotif = {
+      notification_text: "added you as a friend",
+      user_id: 11,
+      sender_id: 6,
+    };
+    return request(app)
+      .post("/api/notifications")
+      .send(newNotif)
+      .expect(201)
+      .then(({ body }) => {
+        const { notification } = body;
+        expect(notification.user_id).toBe(11);
+        expect(notification.sender_id).toBe(6);
+        expect(notification.seen).toBe(false);
+      });
+  });
+
+  test("POST: 400 responds with a Bad Request error if the data passed is not the right type", () => {
+    const newNotif = {
+      notification_text: "added you as a friend",
+      user_id: "George",
+      sender_id: "Eve",
+    };
+    return request(app)
+      .post("/api/notifications")
+      .send(newNotif)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+});
