@@ -22,7 +22,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 2) => {
 
   io.on("connection", async (socket) => {
     console.log("Rooms open:", io.of("/").adapter.rooms);
-    console.log(`${socket.id} connected to server`);
+    console.log(`${socket.id} connected to server at ${new Date()}`);
 
     socket.on("topic-selected", async (topic_id, player, callback) => {
       if (callback) callback();
