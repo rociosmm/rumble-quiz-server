@@ -12,7 +12,7 @@ const openTdb_url = axios.create({
   baseURL: "https://opentdb.com",
 });
 
-exports.configureSockets = (server, ROOM_LIMIT = 3) => {
+exports.configureSockets = (server, ROOM_LIMIT = 2) => {
   const io = socketIO(server, {
     cors: {
       origin: "*",
