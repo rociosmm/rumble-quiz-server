@@ -14,6 +14,8 @@ const joinRoom = async (
 ) => {
   const room = io.sockets.adapter.rooms.get(topic_id);
   const roomExists = checkRoomExists(io, topic_id);
+  console.log('room - create room file :>> ', room);
+  console.log('roomExists - create room file :>> ', roomExists);
   if (!roomExists) {
     await socket.join(`${topic_id}`);
     createGameData(topic_id);
