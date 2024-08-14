@@ -58,7 +58,7 @@ exports.getFriends = (req, res, next) => {
   const { username } = req.params;
   fetchFriends(username)
     .then((friends) => {
-      res.status(200).send({ friends });
+      res.status(200).send({ friends: Array.from(friends) }); // Array from Set
     })
     .catch((err) => {
       next(err);

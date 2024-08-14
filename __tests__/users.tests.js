@@ -128,13 +128,9 @@ describe("/api/users/:username/friends", () => {
       .get("/api/users/George/friends")
       .expect(200)
       .then(({ body }) => {
-        expect(body.friends).toHaveLength(3);
-        body.friends.forEach((friend) => {
-          expect(friend).toMatchObject({
-            user1_username: "George",
-            user2_username: expect.any(String),
-          });
-        });
+        const { friends } = body;
+        expect(friends.length).toBeGreaterThan(0);
+        expect(friends).toEqual(["Janet", "Eve", "Tobias", "Rachel"]);
       });
   });
   test("GET: 404 responds with User Not Found if username not found", () => {
@@ -232,7 +228,7 @@ describe("/api/users", () => {
       .expect(200)
       .then(({ body }) => {
         const { users } = body;
-        expect(users.length).toBeGreaterThan(1)
+        expect(users.length).toBeGreaterThan(1);
 
         users.forEach((user) => {
           expect(user).toMatchObject({
