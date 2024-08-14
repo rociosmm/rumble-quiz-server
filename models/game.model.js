@@ -37,7 +37,7 @@ const logGameData = async (topic_id, topic_name) => {
   const game_id = topic_id + uuidv4();
 
   const baseURL = axios.create({
-    baseURL: "https://rumble-quiz-server.onrender.com/api",
+    baseURL: "https://rumble-quiz-server-1m0p.onrender.com",
   });
 
   const postDat = [];

@@ -3,7 +3,7 @@
 Rumble Quiz is a multiplayer mobile trivia game. It was built by Alex Taylor, Nikki Truong, Rocio Sainz-Maza and Jo Watson as the final project of the Northcoders Software Development bootcamp.
 
 The back-end of the project was built with **express** and **node-postgres** for the storage of user data and **socket-io** for managing web-socket data sharing. The full list of dependencies can be found in `package.json`.
-The api is hosted at: [https://rumble-quiz-server.onrender.com/api](https://rumble-quiz-server.onrender.com)
+The api is hosted at: [https://rumble-quiz-server-1m0p.onrender.com/api](https://rumble-quiz-server-1m0p.onrender.com)
 
 The front-end can be found [here](https://github.com/JoWatson2011/rumble-quiz-app)!
 
