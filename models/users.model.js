@@ -123,13 +123,44 @@ exports.fetchFriends = (username) => {
     .then(({ rows }) => {
       if (rows.length === 0)
         return Promise.reject({ status: 404, msg: "User Not Found" });
+
+      return Promise.all([
+        db.query(
+          `SELECT user2_username FROM friendship WHERE user1_username = $1`,
+          [username]
+        ),
+        db.query(
+          `SELECT user1_username FROM friendship WHERE user2_username = $1`,
+          [username]
+        ),
+      ]).then((values) => {
+        if (!values[0].rows.length && !values[1].rows.length) {
+          return Promise.reject({ status: 404, msg: "Not found" });
+        }
+        const friendList = new Set();
+        values[0].rows.forEach((fr) => {
+          return friendList.add(fr.user2_username);
+        });
+        values[1].rows.forEach((fr) => {
+          return friendList.add(fr.user1_username);
+        });
+        return friendList;
+      });
+    });
+}; 
+/*exports.fetchFriends = (username) => {
+  return db
+    .query(`SELECT * FROM users WHERE username = $1;`, [username])
+    .then(({ rows }) => {
+      if (rows.length === 0)
+        return Promise.reject({ status: 404, msg: "User Not Found" });
       return db
         .query(`SELECT * FROM friendship WHERE user1_username = $1`, [username])
         .then(({ rows }) => {
           return rows;
         });
     });
-};
+};*/
 
 exports.addFriendship = (username, newFriend) => {
   if (!newFriend) return Promise.reject({ status: 400, msg: "Bad Request" });

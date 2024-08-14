@@ -71,4 +71,8 @@ module.exports = [
     user1_username: "Rachel",
     user2_username: "Byron",
   },
+  {
+    user1_username: "Rachel",
+    user2_username: "George",
+  },
 ];
