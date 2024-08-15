@@ -83,7 +83,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 2) => {
               } else {
                 console.log(`${topic_id}: game ended`);
                 io.to(topic_id).emit("end-of-game");
-                await logGameData(topic_id, topicName);
+                await logGameData(topic_id, topicName, io);
               }
             };
 
