@@ -2,6 +2,7 @@ const { addGameDataToLog, fetchUsersPoints } = require("../models/logs.models");
 
 exports.postLogs = (req, res, next) => {
   const gameData = req.body;
+  console.log('gameData logs.controller postLogs :>> ', gameData); //rocio
   addGameDataToLog(gameData)
     .then((addedLogs) => {
       res.status(201).send({ addedLogs });

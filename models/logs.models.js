@@ -19,8 +19,12 @@ exports.addGameDataToLog = (gameData) => {
       ]
     )
   );
-
+  console.log(
+    "insertQueryStr in logsModel addGameDataToLog() :>> ",
+    insertQueryStr
+  );
   return db.query(insertQueryStr).then(({ rows }) => {
+    console.log("rows :>> ", rows);
     if (rows.length === 0)
       return Promise.reject({ status: 400, msg: "Bad Request" });
     return rows;
@@ -28,14 +32,17 @@ exports.addGameDataToLog = (gameData) => {
 };
 
 exports.fetchUsersPoints = () => {
-  return db.query(`
+  return db
+    .query(
+      `
     SELECT 
     player_username,
     CAST(SUM(points) AS INTEGER) AS total_points 
     FROM logs
     GROUP BY player_username
-    ORDER BY total_points DESC;`)
-    .then(({rows}) => {
-      return rows
+    ORDER BY total_points DESC;`
+    )
+    .then(({ rows }) => {
+      return rows;
     });
 };
