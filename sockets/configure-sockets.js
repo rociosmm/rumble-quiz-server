@@ -78,7 +78,7 @@ exports.configureSockets = (server, ROOM_LIMIT = 2) => {
 
               if (ongoingGames[topic_id].players_active.length > 1) {
                 io.to(topic_id).emit("question", questions[round], () => {
-                  console.log(`Question ${round + 1} sent to room ${topic_id}`);
+                  console.log(`Question ${round === 0 ? round + 1 : round} sent to room ${topic_id}`);
                 });
               } else {
                 console.log(`${topic_id}: game ended`);
