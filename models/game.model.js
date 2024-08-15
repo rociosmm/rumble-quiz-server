@@ -32,7 +32,7 @@ const updateGameData = (topic_id, answerData) => {
   game.points[answerData.username] += answerData.points;
 };
 
-const logGameData = async (topic_id, topic_name) => {
+const logGameData = async (topic_id, topic_name, io) => {
   const game = ongoingGames[topic_id];
   const game_id = topic_id + uuidv4();
 
@@ -61,6 +61,7 @@ const logGameData = async (topic_id, topic_name) => {
       topic_name: topic_name,
     });
   });
+  io.emit("game_id_info", { game_id });
 
   await baseURL.post("/logs", postDat).catch((err) => {
     console.log("Error posting log:", err);
