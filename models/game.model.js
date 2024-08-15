@@ -56,7 +56,7 @@ const logGameData = async (topic_id, topic_name) => {
     postDat.push({
       game_id: game_id,
       player_username: player,
-      won_game: true,
+      won_game: false,
       points: game.points[player],
       topic_name: topic_name,
     });
