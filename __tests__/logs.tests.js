@@ -1,4 +1,4 @@
-const {app} = require("../app");
+const { app } = require("../app");
 const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
@@ -104,6 +104,50 @@ describe("/api/logs", () => {
         expect(body.leaderboard).toBeSorted("total_points", {
           descending: true,
         });
+      });
+  });
+});
+
+describe("/api/logs/:game_id", () => {
+  test("GET: 200 responds with all the information for a determined game_id", () => {
+    return request(app)
+      .get("/api/logs/1")
+      .expect(200)
+      .then(({ body }) => {
+        const { logs } = body;
+        logs.forEach((log) => {
+          expect(log).toMatchObject({
+            log_id: expect.any(Number),
+            game_id: expect.any(String),
+            player_username: expect.any(String),
+            won_game: expect.any(Boolean),
+            points: expect.any(Number),
+            topic_name: expect.any(String),
+          });
+        });
+      });
+  });
+  test("GET: 200 responds with all the information for a determined game_id and player_username", () => {
+    return request(app)
+      .get("/api/logs/1?player_username=Janet")
+      .expect(200)
+      .then(({ body }) => {
+        const { logs } = body;
+        expect.objectContaining({
+          game_id: "1",
+          player_username: "Janet",
+          won_game: false,
+          points: 40,
+          topic_name: "1",
+        });
+      });
+  });
+  test("GET: 400 responds with Bad Request if the player_username is a wrong data type", () => {
+    return request(app)
+      .get("/api/logs/1?player_username=1")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
       });
   });
 });

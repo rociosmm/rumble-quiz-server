@@ -1,4 +1,8 @@
-const { addGameDataToLog, fetchUsersPoints } = require("../models/logs.models");
+const {
+  addGameDataToLog,
+  fetchUsersPoints,
+  fetchGameData,
+} = require("../models/logs.models");
 
 exports.postLogs = (req, res, next) => {
   const gameData = req.body;
@@ -15,4 +19,16 @@ exports.getLeaderboard = (req, res, next) => {
   fetchUsersPoints().then((leaderboard) => {
     res.status(200).send({ leaderboard });
   });
+};
+
+exports.getGameData = (req, res, next) => {
+  const { game_id } = req.params;
+  const { player_username } = req.query;
+  fetchGameData(game_id, player_username)
+    .then((logs) => {
+      res.status(200).send({ logs });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
