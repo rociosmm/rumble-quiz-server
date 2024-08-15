@@ -62,32 +62,10 @@ const logGameData = async (topic_id, topic_name) => {
     });
   });
 
-  /* await baseURL.post("/logs", postDat).catch((err) => {
+  await baseURL.post("/logs", postDat).catch((err) => {
     console.log("Error posting log:", err);
   });
-  console.log("Game log added:", postDat); */
-  try {
-    const res = await baseURL.post("/logs", postDat)
-    const data = await res.json();
-    console.log('data in try posting logs :>> ', data);
-    return data
-  }
-  catch(err) {
-    console.log("Error posting log:", err);
-  };
   console.log("Game log added:", postDat);
-
-  /*
-  async function fetchData() {
-    try {
-      const response = await fetch('https://api.example.com/data');
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error;
-    }
-  } */
 };
 
 module.exports = {
