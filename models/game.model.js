@@ -66,6 +66,8 @@ const logGameData = async (topic_id, topic_name, io) => {
   await baseURL.post("/logs", postDat).catch((err) => {
     console.log("Error posting log:", err);
   });
+  console.log('game.players_active :>> ', game.players_active);
+  console.log('game.players_eliminated :>> ', game.players_eliminated);
   console.log("Game log added:", postDat);
 };
 
